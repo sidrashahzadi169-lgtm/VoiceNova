@@ -1,0 +1,23 @@
+Version 1 (MVP)
+- User Registration
+- Login
+- Dashboard
+- Text to Speech
+- Voice Selection
+- Audio Player
+- Download MP3
+- User Profile
+- Subscription Plans
+
+Version 2
+- Voice Cloning
+- Speech to Speech
+- AI Dubbing
+- API Access
+- Team Workspace
+
+Version 3
+- AI Podcast Generator
+- AI Audiobook Creator
+- AI Video Voiceover
+- AI Studio

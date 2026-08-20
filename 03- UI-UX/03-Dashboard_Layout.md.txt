@@ -1,0 +1,22 @@
+Left Sidebar:
+- Dashboard
+- Generate Voice
+- My Projects
+- Voice Library
+- Downloads
+- Billing
+- Settings
+- Profile
+
+Top Header:
+- Search
+- Notifications
+- User Menu
+
+Main Area:
+- Text Box
+- Voice Selector
+- Speed
+- Pitch
+- Generate Button
+- Audio Player

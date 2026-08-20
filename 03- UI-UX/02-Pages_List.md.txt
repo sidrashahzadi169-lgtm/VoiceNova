@@ -1,0 +1,22 @@
+Pages
+
+1. Home
+2. Pricing
+3. Login
+4. Signup
+5. Forgot Password
+6. Dashboard
+7. Generate Voice
+8. My Projects
+9. Voice Library
+10. Downloads
+11. Billing
+12. Profile
+13. Settings
+14. API
+15. Contact
+16. Admin Panel
+17. User Management
+18. Analytics
+19. Support
+20. 404 Page

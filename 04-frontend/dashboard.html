@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Studio Dashboard - VoiceNova</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body-tag">
+
+    <!-- Premium Animated Waveform Background Canvas -->
+    <canvas id="bgWaveformCanvas" class="bg-waveform-canvas"></canvas>
+
+    <!-- Ambient Background Glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="dashboard-layout">
+        
+        <!-- ==========================================================================
+           LEFT SIDEBAR NAVIGATION
+           ========================================================================== -->
+        <aside class="dash-sidebar" id="dashSidebar">
+            <div class="sidebar-brand-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="leftArmGrad" x1="10" y1="15" x2="52" y2="95" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6C63FF"/>
+            <stop offset="1" stop-color="#857DFF"/>
+        </linearGradient>
+        <linearGradient id="rightArmGrad" x1="88" y1="15" x2="46" y2="95" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00C2FF"/>
+            <stop offset="1" stop-color="#0088FF"/>
+        </linearGradient>
+    </defs>
+    <!-- Left Arm Bars -->
+    <rect x="10" y="15" width="12" height="30" rx="6" fill="url(#leftArmGrad)" />
+    <rect x="26" y="28" width="12" height="40" rx="6" fill="url(#leftArmGrad)" />
+    <rect x="42" y="45" width="12" height="50" rx="6" fill="url(#leftArmGrad)" />
+    <!-- Right Arm -->
+    <path d="M48 95 L88 15" stroke="url(#rightArmGrad)" stroke-width="16" stroke-linecap="round" />
+</svg>
+                    </div>
+                    <span class="logo-text">VoiceNova</span>
+                </a>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Studio</div>
+                <a href="#" class="sidebar-link active"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></a>
+                <a href="studio.html" class="sidebar-link"><i data-lucide="mic"></i> <span>Generate Voice</span></a>
+                <a href="library.html" class="sidebar-link"><i data-lucide="users"></i> <span>Voice Library</span></a>
+                <a href="projects.html" class="sidebar-link"><i data-lucide="folder-open"></i> <span>My Projects</span></a>
+                <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3"></i> <span>Analytics</span></a>
+                <a href="downloads.html" class="sidebar-link"><i data-lucide="download-cloud"></i> <span>Downloads</span></a>
+                
+                <div class="nav-section-title">Developer & Account</div>
+                <a href="api.html" class="sidebar-link"><i data-lucide="code-2"></i> <span>API Management</span></a>
+                <a href="billing.html" class="sidebar-link"><i data-lucide="credit-card"></i> <span>Billing</span></a>
+                <a href="#" class="sidebar-link" data-dash-tab="tickets"><i data-lucide="life-buoy"></i> <span>Support Tickets</span></a>
+                <a href="settings.html" class="sidebar-link"><i data-lucide="settings"></i> <span>Settings</span></a>
+                <a href="help.html" class="sidebar-link"><i data-lucide="help-circle"></i> <span>Help & Support</span></a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="index.html" class="sidebar-link logout-link"><i data-lucide="log-out"></i> <span>Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- ==========================================================================
+           MAIN CONTENT AREA
+           ========================================================================== -->
+        <main class="dash-main">
+            
+            <!-- Top Header -->
+            <header class="dash-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggleBtn"><i data-lucide="menu"></i></button>
+                    <div class="search-bar-wrapper">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" placeholder="Search projects, voices, or templates...">
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <button class="btn btn-secondary assistant-btn" id="headerAssistantBtn">
+                        <i data-lucide="sparkles"></i> <span>AI Assistant</span>
+                    </button>
+                    
+                    <button class="icon-notification-btn" aria-label="Notifications" id="notificationBtn">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-indicator"></span>
+                    </button>
+                    
+                    <div class="user-avatar-wrapper">
+                        <div class="avatar-ring">
+                            <span class="avatar-letter">S</span>
+                            <span class="avatar-status-dot"></span>
+                        </div>
+                        <div class="user-profile-details">
+                            <span class="profile-name">Sidra</span>
+                            <span class="profile-plan-badge">Pro</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Workspace container -->
+            <div class="dash-workspace">
+                
+                <!-- Welcome Banner Card with Quota Progress Ring -->
+                <div class="welcome-card glass-panel">
+                    <div class="welcome-glow"></div>
+                    <div class="welcome-card-content-wrapper">
+                        <div class="welcome-card-content">
+                            <h1 class="welcome-title">Welcome back, Sidra 👋</h1>
+                            <p class="welcome-desc">Your neural synthesis nodes are fully active. Start generating crystal-clear voices or drafting scripts with our AI Assistant.</p>
+                            <div class="welcome-buttons">
+                                <a href="#voice-studio-anchor" class="btn btn-primary btn-glow-hover"><i data-lucide="plus-circle"></i> Generate Speech</a>
+                                <a href="#ai-script-assistant" class="btn btn-secondary"><i data-lucide="pen-tool"></i> Write Script</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Credit Usage Progress Ring -->
+                        <div class="progress-ring-wrapper">
+                            <svg class="progress-ring-svg" width="100" height="100">
+                                <circle class="ring-circle-bg" cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="transparent"/>
+                                <circle class="ring-circle-fill" id="quotaProgressRing" cx="50" cy="50" r="40" stroke="url(#ring-gradient)" stroke-width="8" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="138.16" stroke-linecap="round"/>
+                                <defs>
+                                    <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#6C63FF"/>
+                                        <stop offset="100%" stop-color="#00C2FF"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="progress-ring-text">
+                                <span class="ring-percentage">45%</span>
+                                <span class="ring-label">Used</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon-side color-purple"><i data-lucide="type"></i></div>
+                        <div class="metric-text-side">
+                            <span class="metric-label">Characters Synthesized</span>
+                            <h3 class="metric-number">45,210</h3>
+                            <span class="metric-subtext">Used this billing cycle</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon-side color-cyan"><i data-lucide="mic"></i></div>
+                        <div class="metric-text-side">
+                            <span class="metric-label">Voices Configured</span>
+                            <h3 class="metric-number">12 Saved</h3>
+                            <span class="metric-subtext">5 standard, 7 clones</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon-side color-green"><i data-lucide="folder"></i></div>
+                        <div class="metric-text-side">
+                            <span class="metric-label">Active Projects</span>
+                            <h3 class="metric-number">8 Saved</h3>
+                            <span class="metric-subtext">WAV exports generated</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon-side color-yellow"><i data-lucide="zap"></i></div>
+                        <div class="metric-text-side">
+                            <span class="metric-label">Remaining Balance</span>
+                            <h3 class="metric-number">54,790 Chars</h3>
+                            <span class="metric-subtext">Quota resets in 12 days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Templates Section -->
+                <div class="quick-templates-section">
+                    <h3 class="dash-section-title">Quick Content Templates</h3>
+                    <div class="templates-grid">
+                        <button class="template-card glass-panel" data-template="youtube">
+                            <div class="template-icon color-red"><i data-lucide="youtube"></i></div>
+                            <span class="template-name">YouTube Video</span>
+                        </button>
+                        <button class="template-card glass-panel" data-template="facebook">
+                            <div class="template-icon color-blue"><i data-lucide="facebook"></i></div>
+                            <span class="template-name">Facebook Reel</span>
+                        </button>
+                        <button class="template-card glass-panel" data-template="tiktok">
+                            <div class="template-icon color-tiktok"><i data-lucide="music-2"></i></div>
+                            <span class="template-name">TikTok Video</span>
+                        </button>
+                        <button class="template-card glass-panel" data-template="podcast">
+                            <div class="template-icon color-purple"><i data-lucide="podcast"></i></div>
+                            <span class="template-name">Podcast Script</span>
+                        </button>
+                        <button class="template-card glass-panel" data-template="ad">
+                            <div class="template-icon color-yellow"><i data-lucide="megaphone"></i></div>
+                            <span class="template-name">Advertisement</span>
+                        </button>
+                        <button class="template-card glass-panel" data-template="audiobook">
+                            <div class="template-icon color-green"><i data-lucide="book-open"></i></div>
+                            <span class="template-name">Audiobook Chapter</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Studio Workspace Row -->
+                <div class="studio-workspace-row" id="voice-studio-anchor">
+                    
+                    <!-- AI Voice Studio Card -->
+                    <div class="glass-panel voice-studio-card">
+                        <div class="studio-card-header">
+                            <h2 class="studio-card-title"><i data-lucide="sparkles" style="color: var(--color-secondary);"></i> AI Voice Studio</h2>
+                            <span class="studio-version-tag">Model: SpeechEngine v2.0-Ultra</span>
+                        </div>
+                        
+                        <form class="studio-form" id="dashboardStudioForm">
+                            <!-- AI Script Assistant Panel Inside Studio -->
+                            <div class="script-assistant-wrapper glass-panel" id="ai-script-assistant">
+                                <div class="script-assistant-header">
+                                    <i data-lucide="pen-tool" class="assistant-icon"></i>
+                                    <span>AI Script Writer</span>
+                                </div>
+                                <div class="script-assistant-row">
+                                    <input type="text" id="aiScriptPrompt" placeholder="Describe the script (e.g., 'A 30-second Facebook Reel promoting voice cloning technology')...">
+                                    <button type="button" class="btn btn-primary btn-sm btn-glow-hover" id="aiGenerateScriptBtn">
+                                        <i data-lucide="wand-2"></i> <span>Write with AI</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Text Editor Pane -->
+                            <div class="studio-input-group">
+                                <div class="editor-header-controls">
+                                    <label for="editorText">Enter Speech Script</label>
+                                    <div class="editor-actions">
+                                        <button type="button" class="editor-btn" title="Clear text" id="clearTextBtn"><i data-lucide="trash-2"></i></button>
+                                        <button type="button" class="editor-btn" title="Add 1s Pause" id="addPauseBtn"><i data-lucide="timer"></i> <span>Pause</span></button>
+                                    </div>
+                                </div>
+                                <textarea id="editorText" placeholder="Welcome back, Sidra. Type or paste your studio scripts here. Adjust vocal pacing, velocity, accents, and emotional parameters below to synthesize lifelike, broadcast-ready voiceovers instantly..." maxlength="5000">Welcome to VoiceNova Studio. Experience the absolute pinnacle of high-fidelity neural vocal synthesis. Adjust the pitch, language, and emotional models to synthesize human-like voiceovers in real-time.</textarea>
+                                <div class="char-counter-row">
+                                    <span class="char-limit-error" id="charLimitError" style="display: none;">Character limit exceeded!</span>
+                                    <div class="char-counter"><span id="editorCharCount">226</span> / 5000 chars</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Parameter Selection Grid -->
+                            <div class="selectors-grid">
+                                <div class="form-group">
+                                    <label for="selectLanguage">Language</label>
+                                    <div class="custom-select">
+                                        <select id="selectLanguage">
+                                            <option value="en">English (US)</option>
+                                            <option value="ur">Urdu (اردو)</option>
+                                            <option value="ar">Arabic (العربية)</option>
+                                            <option value="es">Spanish (Español)</option>
+                                            <option value="fr">French (Français)</option>
+                                            <option value="ja">Japanese (日本語)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectVoice">Voice Actor</label>
+                                    <div class="custom-select">
+                                        <select id="selectVoice">
+                                            <option value="Nova" data-desc="Female - Warm & Professional">Nova (Female - Professional)</option>
+                                            <option value="Aero" data-desc="Male - Bold & Narrative">Aero (Male - Narrator)</option>
+                                            <option value="Lily" data-desc="Child - Bright & Energetic">Lily (Child Voice)</option>
+                                            <option value="Amina" data-desc="Urdu Female - Sweet & Fluent">Amina (Urdu Female)</option>
+                                            <option value="Tareq" data-desc="Arabic Male - Deep & Cinematic">Tareq (Arabic Male)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectAccent">Accent Profile</label>
+                                    <div class="custom-select">
+                                        <select id="selectAccent">
+                                            <option value="us">United States (US)</option>
+                                            <option value="uk">United Kingdom (UK)</option>
+                                            <option value="au">Australia (AU)</option>
+                                            <option value="ca">Canada (CA)</option>
+                                            <option value="in">India (IN)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectGender">Gender Tone</label>
+                                    <div class="custom-select">
+                                        <select id="selectGender">
+                                            <option value="female">Female Profile</option>
+                                            <option value="male">Male Profile</option>
+                                            <option value="neutral">Neutral/Ambiguous</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectEmotion">Emotion Model</label>
+                                    <div class="custom-select">
+                                        <select id="selectEmotion">
+                                            <option value="calm">Calm & Professional</option>
+                                            <option value="happy">Cheerful & Energetic</option>
+                                            <option value="serious">Narrative & Serious</option>
+                                            <option value="energetic">Bold & Promotional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Vocal Parameter Sliders -->
+                            <div class="sliders-row">
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="sliderSpeed">Speed Rate</label>
+                                        <span class="slider-display-val" id="valSpeed">1.00x</span>
+                                    </div>
+                                    <input type="range" id="sliderSpeed" min="0.5" max="2.0" step="0.05" value="1.0" class="premium-slider">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="sliderPitch">Pitch Deviation</label>
+                                        <span class="slider-display-val" id="valPitch">0%</span>
+                                    </div>
+                                    <input type="range" id="sliderPitch" min="-50" max="50" step="5" value="0" class="premium-slider">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="slider-label-row">
+                                        <label for="sliderVolume">Volume Amplitude</label>
+                                        <span class="slider-display-val" id="valVolume">100%</span>
+                                    </div>
+                                    <input type="range" id="sliderVolume" min="0" max="100" step="1" value="100" class="premium-slider">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-full btn-lg btn-glow-hover" id="dashGenerateBtn">
+                                <i data-lucide="sparkles" class="btn-icon"></i> <span>Synthesize Voiceover</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Sidebar Panel - Storage & Tips -->
+                    <div class="quick-actions-panel">
+                        <!-- Upgrades & Premium Promo -->
+                        <div class="upgrade-promo-card glass-panel" style="margin-top: 0;">
+                            <div class="upgrade-promo-glow"></div>
+                            <div class="upgrade-promo-content">
+                                <h3 class="upgrade-title">Unlock Unlimited Voices</h3>
+                                <p class="upgrade-desc">Get access to custom clones, bulk synthesis pipelines, and 2M character credits/month.</p>
+                                <button class="btn btn-primary btn-full btn-glow-hover" id="sidebarUpgradeBtn">Upgrade to Enterprise</button>
+                            </div>
+                        </div>
+
+                        <!-- Daily Usage Analytics SVG Line Chart -->
+                        <div class="analytics-chart-container glass-panel">
+                            <h3 class="widget-title"><i data-lucide="bar-chart-3"></i> Daily Quota Usage</h3>
+                            <div class="chart-wrapper">
+                                <svg class="analytics-svg" viewBox="0 0 500 200">
+                                    <defs>
+                                        <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#6C63FF" stop-opacity="0.4"/>
+                                            <stop offset="100%" stop-color="#6C63FF" stop-opacity="0"/>
+                                        </linearGradient>
+                                        <linearGradient id="stroke-grad" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="#6C63FF"/>
+                                            <stop offset="100%" stop-color="#00C2FF"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <line x1="40" y1="20" x2="480" y2="20" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="4"/>
+                                    <line x1="40" y1="70" x2="480" y2="70" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="4"/>
+                                    <line x1="40" y1="120" x2="480" y2="120" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="4"/>
+                                    <line x1="40" y1="170" x2="480" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                                    <path d="M 40 170 L 40 120 Q 110 70 180 140 T 320 60 Q 390 130 480 50 L 480 170 Z" fill="url(#chart-glow)"/>
+                                    <path d="M 40 120 Q 110 70 180 140 T 320 60 Q 390 130 480 50" fill="none" stroke="url(#stroke-grad)" stroke-width="3" stroke-linecap="round"/>
+                                    <circle cx="40" cy="120" r="4" fill="#6C63FF"/>
+                                    <circle cx="180" cy="140" r="4" fill="#6C63FF"/>
+                                    <circle cx="320" cy="60" r="4" fill="#00C2FF"/>
+                                    <circle cx="480" cy="50" r="4" fill="#00C2FF"/>
+                                    <text x="40" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Mon</text>
+                                    <text x="110" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Tue</text>
+                                    <text x="180" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Wed</text>
+                                    <text x="250" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Thu</text>
+                                    <text x="320" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Fri</text>
+                                    <text x="390" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Sat</text>
+                                    <text x="480" y="190" fill="var(--color-text-muted)" font-size="9" text-anchor="middle">Sun</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waveform Audio Player Preview Card -->
+                <div class="glass-panel audio-preview-card" id="audioPreviewCard" style="display: none;">
+                    <div class="audio-card-header">
+                        <div class="audio-info">
+                            <h3 class="audio-title">Synthesized Output Preview</h3>
+                            <p class="audio-subtitle" id="audioSubDetails">Voice: Nova | English (US) | Speed: 1.00x | Emotion: Calm</p>
+                        </div>
+                        <div class="audio-meta" id="audioDuration">0:00</div>
+                    </div>
+                    
+                    <div class="audio-player-body">
+                        <!-- Playback Controls -->
+                        <button class="player-btn-circle" id="playerPlayPauseBtn">
+                            <i data-lucide="play" id="playPauseIcon"></i>
+                        </button>
+                        
+                        <!-- Oscillating Waveform Visualizer -->
+                        <div class="player-timeline-wrapper">
+                            <div class="waveform-player-container">
+                                <canvas id="playerWaveformCanvas"></canvas>
+                            </div>
+                            <div class="player-progress-bar-wrapper">
+                                <div class="player-current-time" id="playerCurrentTime">0:00</div>
+                                <div class="player-scrubber-track" id="playerScrubber">
+                                    <div class="player-scrubber-fill" id="playerScrubberFill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File Download Action Buttons -->
+                    <div class="audio-card-footer">
+                        <div class="footer-left-actions">
+                            <button class="btn btn-outline" id="downloadMp3Btn"><i data-lucide="download"></i> <span>Download MP3</span></button>
+                            <button class="btn btn-outline" id="downloadWavBtn"><i data-lucide="download-cloud"></i> <span>Download WAV</span></button>
+                        </div>
+                        <button class="btn btn-secondary" id="copyAudioLinkBtn"><i data-lucide="link-2"></i> <span>Copy Share Link</span></button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================================
+                   NEW SECTION 2: TRENDING AI VOICES
+                   ========================================================================== -->
+                <section class="trending-voices-section" id="trending-voices-section">
+                    <h2 class="section-title-alt">Trending AI Voices</h2>
+                    <p class="section-subtitle-alt">Preview and select the most popular neural voice profiles in the studio library.</p>
+                    
+                    <div class="voices-scroll-container">
+                        <!-- Voice 1: Female Professional -->
+                        <div class="voice-profile-card glass-panel" data-voice="Nova" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-nova">NV</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Nova</h4>
+                                    <span class="voice-tag">Female Professional</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Warm, friendly, and structured. Best for explainer clips, ads, and video summaries.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Nova"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Nova" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 2: Male Narrator -->
+                        <div class="voice-profile-card glass-panel" data-voice="Aero" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-aero">AR</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Aero</h4>
+                                    <span class="voice-tag">Male Narrator</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Deep, engaging, and rich. Ideal for documentary films, audiobooks, and reports.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Aero"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Aero" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 3: Child Voice -->
+                        <div class="voice-profile-card glass-panel" data-voice="Lily" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-child">LY</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Lily</h4>
+                                    <span class="voice-tag">Child Voice</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">High-pitched, bright, and enthusiastic. Perfect for kids stories and educational tutorials.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Lily"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Lily" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 4: Urdu Female -->
+                        <div class="voice-profile-card glass-panel" data-voice="Amina" data-lang="ur">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-urdu">AM</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Amina</h4>
+                                    <span class="voice-tag">Urdu Female</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Fluent, natural, and expressive accent. Tailored for South Asian audiences.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Amina"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Amina" data-lang="ur">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 5: Arabic Male -->
+                        <div class="voice-profile-card glass-panel" data-voice="Tareq" data-lang="ar">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-arabic">TQ</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Tareq</h4>
+                                    <span class="voice-tag">Arabic Male</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Clear, formal, and authoritative phrasing. Designed for regional newscasts and explainers.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Tareq"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Tareq" data-lang="ar">Use Voice</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================================
+                   NEW SECTION 1: RECENT AUDIO GENERATIONS
+                   ========================================================================== -->
+                <section class="recent-generations-section" id="recent-generations-section">
+                    <div class="recent-gen-header">
+                        <h2 class="section-title-alt">Recent Audio Generations</h2>
+                        <span class="recent-gen-quota">Quota utilized: 8 tracks</span>
+                    </div>
+                    
+                    <div class="generations-grid" id="generationsGrid">
+                        <!-- Track 1 -->
+                        <div class="generation-card glass-panel">
+                            <div class="gen-card-header">
+                                <button class="gen-play-btn"><i data-lucide="play"></i></button>
+                                <div class="gen-title-meta">
+                                    <h4 class="gen-track-title">Product Explainer Video Script v2</h4>
+                                    <span class="gen-track-details">Voice: Nova | English (US) | July 1, 2026</span>
+                                </div>
+                                <span class="gen-duration">0:14</span>
+                            </div>
+                            
+                            <!-- Static audio wave graphics -->
+                            <div class="gen-waveform-preview">
+                                <span class="line line-1" style="height: 40%"></span>
+                                <span class="line line-2" style="height: 60%"></span>
+                                <span class="line line-3" style="height: 35%"></span>
+                                <span class="line line-4" style="height: 80%"></span>
+                                <span class="line line-5" style="height: 50%"></span>
+                                <span class="line line-6" style="height: 90%"></span>
+                                <span class="line line-7" style="height: 25%"></span>
+                                <span class="line line-8" style="height: 70%"></span>
+                                <span class="line line-9" style="height: 45%"></span>
+                                <span class="line line-10" style="height: 65%"></span>
+                            </div>
+                            
+                            <div class="gen-card-footer">
+                                <button class="btn btn-text btn-sm action-download" title="Download WAV"><i data-lucide="download"></i> Download</button>
+                                <button class="btn btn-text btn-sm action-share" title="Copy share link"><i data-lucide="share-2"></i> Share</button>
+                            </div>
+                        </div>
+
+                        <!-- Track 2 -->
+                        <div class="generation-card glass-panel">
+                            <div class="gen-card-header">
+                                <button class="gen-play-btn"><i data-lucide="play"></i></button>
+                                <div class="gen-title-meta">
+                                    <h4 class="gen-track-title">Podcast Audio Intro Teaser</h4>
+                                    <span class="gen-track-details">Voice: Aero | English (UK) | June 28, 2026</span>
+                                </div>
+                                <span class="gen-duration">0:08</span>
+                            </div>
+                            
+                            <div class="gen-waveform-preview">
+                                <span class="line line-1" style="height: 30%"></span>
+                                <span class="line line-2" style="height: 50%"></span>
+                                <span class="line line-3" style="height: 75%"></span>
+                                <span class="line line-4" style="height: 40%"></span>
+                                <span class="line line-5" style="height: 60%"></span>
+                                <span class="line line-6" style="height: 35%"></span>
+                                <span class="line line-7" style="height: 85%"></span>
+                                <span class="line line-8" style="height: 50%"></span>
+                                <span class="line line-9" style="height: 65%"></span>
+                                <span class="line line-10" style="height: 40%"></span>
+                            </div>
+                            
+                            <div class="gen-card-footer">
+                <div class="glass-panel audio-preview-card" id="audioPreviewCard" style="display: none;">
+                    <div class="audio-card-header">
+                        <div class="audio-info">
+                            <h3 class="audio-title">Synthesized Output Preview</h3>
+                            <p class="audio-subtitle" id="audioSubDetails">Voice: Nova | English (US) | Speed: 1.00x | Emotion: Calm</p>
+                        </div>
+                        <div class="audio-meta" id="audioDuration">0:00</div>
+                    </div>
+                    
+                    <div class="audio-player-body">
+                        <!-- Playback Controls -->
+                        <button class="player-btn-circle" id="playerPlayPauseBtn">
+                            <i data-lucide="play" id="playPauseIcon"></i>
+                        </button>
+                        
+                        <!-- Oscillating Waveform Visualizer -->
+                        <div class="player-timeline-wrapper">
+                            <div class="waveform-player-container">
+                                <canvas id="playerWaveformCanvas"></canvas>
+                            </div>
+                            <div class="player-progress-bar-wrapper">
+                                <div class="player-current-time" id="playerCurrentTime">0:00</div>
+                                <div class="player-scrubber-track" id="playerScrubber">
+                                    <div class="player-scrubber-fill" id="playerScrubberFill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File Download Action Buttons -->
+                    <div class="audio-card-footer">
+                        <div class="footer-left-actions">
+                            <button class="btn btn-outline" id="downloadMp3Btn"><i data-lucide="download"></i> <span>Download MP3</span></button>
+                            <button class="btn btn-outline" id="downloadWavBtn"><i data-lucide="download-cloud"></i> <span>Download WAV</span></button>
+                        </div>
+                        <button class="btn btn-secondary" id="copyAudioLinkBtn"><i data-lucide="link-2"></i> <span>Copy Share Link</span></button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================================
+                   NEW SECTION 2: TRENDING AI VOICES
+                   ========================================================================== -->
+                <section class="trending-voices-section" id="trending-voices-section">
+                    <h2 class="section-title-alt">Trending AI Voices</h2>
+                    <p class="section-subtitle-alt">Preview and select the most popular neural voice profiles in the studio library.</p>
+                    
+                    <div class="voices-scroll-container">
+                        <!-- Voice 1: Female Professional -->
+                        <div class="voice-profile-card glass-panel" data-voice="Nova" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-nova">NV</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Nova</h4>
+                                    <span class="voice-tag">Female Professional</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Warm, friendly, and structured. Best for explainer clips, ads, and video summaries.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Nova"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Nova" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 2: Male Narrator -->
+                        <div class="voice-profile-card glass-panel" data-voice="Aero" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-aero">AR</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Aero</h4>
+                                    <span class="voice-tag">Male Narrator</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Deep, engaging, and rich. Ideal for documentary films, audiobooks, and reports.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Aero"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Aero" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 3: Child Voice -->
+                        <div class="voice-profile-card glass-panel" data-voice="Lily" data-lang="en">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-child">LY</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Lily</h4>
+                                    <span class="voice-tag">Child Voice</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">High-pitched, bright, and enthusiastic. Perfect for kids stories and educational tutorials.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Lily"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Lily" data-lang="en">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 4: Urdu Female -->
+                        <div class="voice-profile-card glass-panel" data-voice="Amina" data-lang="ur">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-urdu">AM</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Amina</h4>
+                                    <span class="voice-tag">Urdu Female</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Fluent, natural, and expressive accent. Tailored for South Asian audiences.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Amina"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Amina" data-lang="ur">Use Voice</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice 5: Arabic Male -->
+                        <div class="voice-profile-card glass-panel" data-voice="Tareq" data-lang="ar">
+                            <div class="voice-card-header-row">
+                                <div class="voice-avatar avatar-arabic">TQ</div>
+                                <div class="voice-card-meta">
+                                    <h4 class="voice-name">Tareq</h4>
+                                    <span class="voice-tag">Arabic Male</span>
+                                </div>
+                            </div>
+                            <p class="voice-card-description">Clear, formal, and authoritative phrasing. Designed for regional newscasts and explainers.</p>
+                            <div class="voice-card-actions">
+                                <button class="btn btn-secondary btn-sm preview-voice-btn" data-speaker="Tareq"><i data-lucide="volume-2"></i> Preview</button>
+                                <button class="btn btn-outline btn-sm select-voice-btn" data-speaker="Tareq" data-lang="ar">Use Voice</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================================
+                   NEW SECTION 1: RECENT AUDIO GENERATIONS
+                   ========================================================================== -->
+                <section class="recent-generations-section" id="recent-generations-section">
+                    <div class="recent-gen-header">
+                        <h2 class="section-title-alt">Recent Audio Generations</h2>
+                        <span class="recent-gen-quota">Quota utilized: 8 tracks</span>
+                    </div>
+                    
+                    <div class="generations-grid" id="generationsGrid">
+                        <!-- Track 1 -->
+                        <div class="generation-card glass-panel">
+                            <div class="gen-card-header">
+                                <button class="gen-play-btn"><i data-lucide="play"></i></button>
+                                <div class="gen-title-meta">
+                                    <h4 class="gen-track-title">Product Explainer Video Script v2</h4>
+                                    <span class="gen-track-details">Voice: Nova | English (US) | July 1, 2026</span>
+                                </div>
+                                <span class="gen-duration">0:14</span>
+                            </div>
+                            
+                            <!-- Static audio wave graphics -->
+                            <div class="gen-waveform-preview">
+                                <span class="line line-1" style="height: 40%"></span>
+                                <span class="line line-2" style="height: 60%"></span>
+                                <span class="line line-3" style="height: 35%"></span>
+                                <span class="line line-4" style="height: 80%"></span>
+                                <span class="line line-5" style="height: 50%"></span>
+                                <span class="line line-6" style="height: 90%"></span>
+                                <span class="line line-7" style="height: 25%"></span>
+                                <span class="line line-8" style="height: 70%"></span>
+                                <span class="line line-9" style="height: 45%"></span>
+                                <span class="line line-10" style="height: 65%"></span>
+                            </div>
+                            
+                            <div class="gen-card-footer">
+                                <button class="btn btn-text btn-sm action-download" title="Download WAV"><i data-lucide="download"></i> Download</button>
+                                <button class="btn btn-text btn-sm action-share" title="Copy share link"><i data-lucide="share-2"></i> Share</button>
+                            </div>
+                        </div>
+
+                        <!-- Track 2 -->
+                        <div class="generation-card glass-panel">
+                            <div class="gen-card-header">
+                                <button class="gen-play-btn"><i data-lucide="play"></i></button>
+                                <div class="gen-title-meta">
+                                    <h4 class="gen-track-title">Podcast Audio Intro Teaser</h4>
+                                    <span class="gen-track-details">Voice: Aero | English (UK) | June 28, 2026</span>
+                                </div>
+                                <span class="gen-duration">0:08</span>
+                            </div>
+                            
+                            <div class="gen-waveform-preview">
+                                <span class="line line-1" style="height: 30%"></span>
+                                <span class="line line-2" style="height: 50%"></span>
+                                <span class="line line-3" style="height: 75%"></span>
+                                <span class="line line-4" style="height: 40%"></span>
+                                <span class="line line-5" style="height: 60%"></span>
+                                <span class="line line-6" style="height: 35%"></span>
+                                <span class="line line-7" style="height: 85%"></span>
+                                <span class="line line-8" style="height: 50%"></span>
+                                <span class="line line-9" style="height: 65%"></span>
+                                <span class="line line-10" style="height: 40%"></span>
+                            </div>
+                            
+                            <div class="gen-card-footer">
+                                <button class="btn btn-text btn-sm action-download" title="Download WAV"><i data-lucide="download"></i> Download</button>
+                                <button class="btn btn-text btn-sm action-share" title="Copy share link"><i data-lucide="share-2"></i> Share</button>
+                            </div>
+                        </div>
+                    </div>
+                       </section>
+            </div>
+
+            <!-- ==========================================================================
+               SUPPORT TICKETS SECTION
+               ========================================================================== -->
+            <section class="support-tickets-section" style="margin-top: 40px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: white; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="life-buoy" style="color:var(--color-primary);"></i> Support Tickets
+                    </h2>
+                    <button class="btn btn-primary btn-sm btn-glow-hover" id="btnCreateTicket"><i data-lucide="plus"></i> Create New Ticket</button>
+                </div>
+                
+                <div class="glass-panel" style="padding: 0; overflow-x: auto;">
+                    <table class="projects-table" id="userTicketsTable">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align: center; padding: 24px; color: rgba(255,255,255,0.4);">Loading tickets...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Ticket Creation Modal -->
+            <div class="modal-overlay" id="ticketModalOverlay">
+                <div class="modal-card glass-panel" style="max-width: 500px; width: 90%; padding: 24px;">
+                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 style="font-size: 1.1rem; margin: 0;"><i data-lucide="message-square" style="color:var(--color-primary); vertical-align: middle; margin-right: 8px;"></i>Create Support Ticket</h3>
+                        <button id="closeTicketModalBtn" style="background: none; border: none; color: var(--color-text-muted); cursor: pointer;"><i data-lucide="x"></i></button>
+                    </div>
+                    <form id="createTicketForm" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--color-text-secondary);">Subject</label>
+                            <input type="text" id="ticketSubject" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white;" placeholder="Brief description of the issue">
+                        </div>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 150px;">
+                                <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--color-text-secondary);">Category</label>
+                                <div class="custom-select" style="width: 100%;">
+                                    <select id="ticketCategory" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px;">
+                                        <option value="Billing">Billing & Quotas</option>
+                                        <option value="Technical">Technical Issue</option>
+                                        <option value="API">Developer API</option>
+                                        <option value="General">General Inquiry</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px;">
+                                <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--color-text-secondary);">Priority</label>
+                                <div class="custom-select" style="width: 100%;">
+                                    <select id="ticketPriority" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px;">
+                                        <option value="Low">Low</option>
+                                        <option value="Medium" selected>Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--color-text-secondary);">Description</label>
+                            <textarea id="ticketDescription" required style="width: 100%; height: 120px; padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; resize: none; font-family: inherit;" placeholder="Please describe your issue in detail..."></textarea>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--color-text-secondary);">Optional Attachment</label>
+                            <input type="file" id="ticketAttachment" style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: var(--color-text-muted); font-size: 0.85rem;">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-glow-hover" style="margin-top: 8px;">Submit Ticket</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="dash-footer">
+                <div class="footer-left">Version 1.0.0-Beta</div>
+                <div class="footer-right">
+                    <a href="#">Privacy Policy</a>
+                    <span class="sep">•</span>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </footer>
+        </main>
+
+        <!-- ==========================================================================
+           RIGHT SIDEBAR METRICS & TIMELINE
+           ========================================================================== -->
+        <aside class="dash-right-sidebar">
+            <!-- AI Tips Section -->
+            <div class="sidebar-widget glass-panel">
+                <h3 class="widget-title"><i data-lucide="lightbulb" style="color: var(--color-warning);"></i> AI Voice Tips</h3>
+                <div class="tip-card">
+                    <p class="tip-text">💡 <strong>Pacing tip:</strong> Insert commas to naturally delay phrasing, or use <code>[pause: 0.8s]</code> to force the model to capture a breathing pause.</p>
+                </div>
+            </div>
+
+            <!-- Storage Quota Widget -->
+            <div class="sidebar-widget glass-panel">
+                <h3 class="widget-title"><i data-lucide="database" style="color: var(--color-secondary);"></i> Cloud Storage</h3>
+                <div class="storage-details">
+                    <div class="storage-text-row">
+                        <span>45.2 MB used</span>
+                        <span>1.0 GB limit</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill fill-secondary" style="width: 4.5%;"></div>
+                    </div>
+                    <p class="storage-subtext">Holds about 450 generated tracks</p>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+               NEW SECTION 4: AI VOICE HISTORY TIMELINE
+               ========================================================================== -->
+            <div class="sidebar-widget glass-panel">
+                <h3 class="widget-title"><i data-lucide="history" style="color: var(--color-success);"></i> Voice History Timeline</h3>
+                
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-dot dot-primary"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-time">2 hours ago</span>
+                            <h4 class="timeline-event">Synthesized Explainer Script</h4>
+                            <p class="timeline-details">Completed in 1.5s using <strong>Nova</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot dot-secondary"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-time">5 hours ago</span>
+                            <h4 class="timeline-event">Audio Exported</h4>
+                            <p class="timeline-details">Downloaded <strong>Podcast_Intro.wav</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot dot-success"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-time">Yesterday</span>
+                            <h4 class="timeline-event">Voice Cloned</h4>
+                            <p class="timeline-details">Created clone voice profile <strong>Sidra_v1</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- ==========================================================================
+       NEW SECTION 8: FLOATING AI ASSISTANT CHAT ACTION BUBBLE & BOX
+       ========================================================================== -->
+    
+    <!-- Floating Action Button Bubble (FAB) -->
+    <button class="ai-assistant-fab" id="aiAssistantFab" aria-label="Open AI Assistant">
+        <i data-lucide="sparkles"></i>
+        <span class="fab-pulse-ring"></span>
+    </button>
+
+    <!-- Expanded Floating Chat Card -->
+    <div class="ai-assistant-overlay" id="aiAssistantOverlay">
+        <div class="assistant-chat-card glass-panel">
+            <div class="chat-header">
+                <div class="header-user">
+                    <div class="assistant-avatar"><i data-lucide="sparkles"></i></div>
+                    <div class="avatar-info">
+                        <span class="assistant-name">Nova Assistant</span>
+                        <span class="assistant-status">Online</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" id="chatCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="chat-message assistant-msg">
+                    <p>Hello Sidra! I am your VoiceNova script-writing and vocal editing assistant. Drop in scripts for structural tips or spacing edits!</p>
+                </div>
+            </div>
+            
+            <form class="chat-footer" id="chatFormInput">
+                <input type="text" id="chatInputMessage" placeholder="Ask to rewrite, insert pauses, or refine emotions..." required>
+                <button type="submit" class="chat-send-btn"><i data-lucide="send"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <!-- Custom JavaScript -->
+    <script src="dashboard.js"></script>
+    <!-- Admin Panel Navigation injection -->
+    <script src="admin-sidebar.js"></script>
+<script src="apiClient.js"></script>
+</body>
+</html>
+

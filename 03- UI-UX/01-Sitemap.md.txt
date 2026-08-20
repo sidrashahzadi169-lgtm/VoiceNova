@@ -1,0 +1,17 @@
+VoiceNova
+
+├── Home
+├── Pricing
+├── Login
+├── Signup
+├── Dashboard
+│   ├── Generate Voice
+│   ├── My Projects
+│   ├── Voice Library
+│   ├── Downloads
+│   ├── Billing
+│   ├── Settings
+│   └── Profile
+├── API
+├── Contact
+└── Admin Panel

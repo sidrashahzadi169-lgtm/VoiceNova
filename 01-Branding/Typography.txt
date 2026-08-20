@@ -1,0 +1,17 @@
+Heading Font:
+Poppins Bold
+
+Sub Heading:
+Poppins SemiBold
+
+Body Font:
+Inter Regular
+
+Button Font:
+Poppins Medium
+
+Font Style:
+Modern
+Clean
+Readable
+Professionals

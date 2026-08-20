@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+voicenova.db
+voicenova.db-journal
+dist/
+09-uploads/

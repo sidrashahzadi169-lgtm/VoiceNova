@@ -1,0 +1,8 @@
+{
+  "maintenanceMode": false,
+  "newRegistrations": true,
+  "detailedLogging": false,
+  "maxVoices": 50,
+  "defaultModel": "eleven_multilingual_v2",
+  "storageProvider": "Local Disk"
+}

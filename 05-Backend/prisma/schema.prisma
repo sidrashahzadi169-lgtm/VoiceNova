@@ -1,0 +1,286 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Users Model (Authentications & Profile Settings)
+model User {
+  id                 String            @id @default(uuid())
+  name               String
+  email              String            @unique
+  salt               String
+  hash               String
+  plan               String            @default("Free Trial")
+  status             String            @default("Active")
+  verified           Boolean           @default(false)
+  verificationToken  String?
+  resetToken         String?
+  resetExpiry        DateTime?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  stripeCustomerId   String?           @unique
+  cardBrand          String?
+  cardLast4          String?
+  cardExpMonth       Int?
+  cardExpYear        Int?
+
+  projects           Project[]
+  generations        VoiceGeneration[]
+  subscriptions      Subscription[]
+  payments           Payment[]
+  apiKeys            APIKey[]
+  analytics          UsageAnalytics[]
+  notifications      Notification[]
+  activityLogs       ActivityLog[]
+
+  @@index([email])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// 2. Projects Model (Script Editors & Audios)
+model Project {
+  id                 String            @id @default(uuid())
+  userId             String
+  name               String
+  scriptText         String
+  audioUrl           String?
+  charCount          Int               @default(0)
+  status             String            @default("Draft")
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generations        VoiceGeneration[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("projects")
+}
+
+// 3. Voices Model (AI Voice Profiles Catalog)
+model Voice {
+  id                 String            @id @default(uuid())
+  name               String            @unique
+  gender             String
+  age                String
+  accent             String
+  previewUrl         String?
+  category           String            @default("Standard")
+  description        String?
+  featured           Boolean           @default(false)
+  providerVoiceId    String?
+  providerName       String?           @default("local")
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  generations        VoiceGeneration[]
+
+  @@index([featured])
+  @@index([deletedAt])
+  @@index([providerVoiceId])
+  @@map("voices")
+}
+
+// 4. VoiceGenerations Model (Generated Audio Clips logs)
+model VoiceGeneration {
+  id                 String            @id @default(uuid())
+  projectId          String?
+  userId             String
+  voiceId            String
+  text               String
+  duration           Float?
+  audioUrl           String?
+  format             String            @default("MP3")
+  quality            String            @default("Standard")
+  provider           String            @default("elevenlabs")
+  storageKey         String?
+  charCount          Int               @default(0)
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  project            Project?          @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voice              Voice             @relation(fields: [voiceId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([voiceId])
+  @@index([provider])
+  @@index([deletedAt])
+  @@map("voice_generations")
+}
+
+// 5. Subscriptions Model (Quotas Limits & Active cycles)
+model Subscription {
+  id                 String            @id @default(uuid())
+  userId             String
+  plan               String
+  status             String
+  creditLimit        Int
+  creditUsed         Int               @default(0)
+  startDate          DateTime          @default(now())
+  endDate            DateTime
+  billingCycle       String            @default("monthly")
+  pricePaid          Float             @default(0.0)
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  stripeSubscriptionId String?         @unique
+  stripePriceId        String?
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("subscriptions")
+}
+
+// 6. Payments Model (Transactional Billing Invoices)
+model Payment {
+  id                 String            @id @default(uuid())
+  userId             String
+  planName           String?
+  amount             Float
+  currency           String            @default("USD")
+  status             String
+  provider           String
+  transactionId      String            @unique
+  invoiceUrl         String?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("payments")
+}
+
+// 7. APIKeys Model (Developer key scopes and hashes)
+model APIKey {
+  id                 String            @id @default(uuid())
+  userId             String
+  keyHash            String            @unique
+  name               String            @default("Default Key")
+  maskedKey          String
+  active             Boolean           @default(true)
+  expiresAt          DateTime?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@index([deletedAt])
+  @@map("api_keys")
+}
+
+// 8. UsageAnalytics Model (API request traffic analytics)
+model UsageAnalytics {
+  id                 String            @id @default(uuid())
+  userId             String
+  requestPath        String
+  method             String
+  statusCode         Int
+  responseTimeMs     Int
+  charsUsed          Int               @default(0)
+  createdAt          DateTime          @default(now())
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("usage_analytics")
+}
+
+// 9. Notifications Model (In-app Alerts & system feeds)
+model Notification {
+  id                 String            @id @default(uuid())
+  userId             String
+  title              String
+  message            String
+  read               Boolean           @default(false)
+  type               String            @default("info")
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([deletedAt])
+  @@map("notifications")
+}
+
+// 10. ActivityLogs Model (Security log audit events)
+model ActivityLog {
+  id                 String            @id @default(uuid())
+  userId             String
+  action             String
+  ipAddress          String?
+  userAgent          String?
+  createdAt          DateTime          @default(now())
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// 11. SynthesisLog Model — records every direct ElevenLabs synthesis call
+// Does NOT require user auth or voice DB sync — standalone audit trail.
+model SynthesisLog {
+  id           String   @id @default(uuid())
+  downloadId   String   @unique   // UUID used in the download URL
+  voiceId      String             // ElevenLabs voice_id
+  voiceName    String
+  text         String
+  filename     String             // filename saved on disk
+  duration     Float
+  charCount    Int
+  sizeBytes    Int
+  format       String   @default("MP3")
+  modelId      String   @default("eleven_multilingual_v2")
+  createdAt    DateTime @default(now())
+  userId       String?
+
+  @@index([createdAt])
+  @@index([downloadId])
+  @@index([userId])
+  @@map("synthesis_logs")
+}
+
+// 12. EmailJob Model — Database queue for robust email delivery
+model EmailJob {
+  id           String   @id @default(uuid())
+  to           String
+  subject      String
+  htmlBody     String
+  status       String   @default("Pending") // Pending, Sent, Failed
+  attempts     Int      @default(0)
+  errorLog     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("email_jobs")
+}

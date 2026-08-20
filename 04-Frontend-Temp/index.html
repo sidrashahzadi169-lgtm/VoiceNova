@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceNova - Generate Human-Like AI Voices in Seconds</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Transform text into natural-sounding speech instantly with VoiceNova. Access 200+ premium AI voices, clone your voice, and scale your audio production with our developer-first API.">
+    <meta name="keywords" content="AI voice, text to speech, voice cloning, AI speech, synthetic voice, developer voice API, VoiceNova">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voicenova.ai/">
+    <meta property="og:title" content="VoiceNova - Human-Like AI Voices">
+    <meta property="og:description" content="Generate crystal-clear, emotional AI speech and clone voices in seconds. Try VoiceNova free.">
+    <meta property="og:image" content="https://voicenova.ai/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="VoiceNova - Human-Like AI Voices">
+    <meta property="twitter:description" content="Generate crystal-clear, emotional AI speech and clone voices in seconds. Try VoiceNova free.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient Background Glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Sticky Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="container navbar-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 20V20C8 13.3726 13.3726 8 20 8V8C26.6274 8 32 13.3726 32 20V20C32 26.6274 26.6274 32 20 32V32C13.3726 32 8 26.6274 8 20Z" stroke="url(#paint0_linear)" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M14 20V20" stroke="url(#paint1_linear)" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M20 13V27" stroke="url(#paint2_linear)" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M26 17V23" stroke="url(#paint3_linear)" stroke-width="4" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="paint0_linear" x1="8" y1="8" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C63FF"/>
+                                <stop offset="1" stop-color="#00C2FF"/>
+                            </linearGradient>
+                            <linearGradient id="paint1_linear" x1="14" y1="20" x2="14" y2="20" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C63FF"/>
+                                <stop offset="1" stop-color="#00C2FF"/>
+                            </linearGradient>
+                            <linearGradient id="paint2_linear" x1="20" y1="13" x2="20" y2="27" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C63FF"/>
+                                <stop offset="1" stop-color="#00C2FF"/>
+                            </linearGradient>
+                            <linearGradient id="paint3_linear" x1="26" y1="17" x2="26" y2="23" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C63FF"/>
+                                <stop offset="1" stop-color="#00C2FF"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">VoiceNova</span>
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#api" class="nav-link">API</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-text" id="openLoginBtn">Login</a>
+                <a href="signup.html" class="btn btn-primary" id="openGetStartedBtn">Get Started</a>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="section hero-section" id="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="badge hero-badge">
+                    <span class="badge-icon">✨</span>
+                    <span class="badge-text">VoiceNova 2.0 is Live</span>
+                </div>
+                <h1 class="hero-title">Generate Human-Like <span class="gradient-text">AI Voices</span> in Seconds</h1>
+                <p class="hero-desc">
+                    Transform text into crystal-clear, emotional, and expressive speech. Clone any voice with just 10 seconds of audio, or choose from our library of 200+ studio-grade voices.
+                </p>
+                <div class="hero-buttons">
+                    <a href="signup.html" class="btn btn-primary btn-lg btn-glow-hover" id="heroStartBtn">Start Free</a>
+                    <button class="btn btn-secondary btn-lg" id="heroDemoBtn">
+                        <i data-lucide="play" class="btn-icon"></i> Watch Demo
+                    </button>
+                </div>
+                <div class="hero-features-list">
+                    <div class="hero-feature-item">
+                        <i data-lucide="check" class="check-icon"></i>
+                        <span>No credit card required</span>
+                    </div>
+                    <div class="hero-feature-item">
+                        <i data-lucide="check" class="check-icon"></i>
+                        <span>10,000 free characters</span>
+                    </div>
+                    <div class="hero-feature-item">
+                        <i data-lucide="check" class="check-icon"></i>
+                        <span>Commercial usage</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-graphic">
+                <div class="dashboard-mockup glass-panel">
+                    <div class="dashboard-header">
+                        <div class="window-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <div class="window-title">VoiceNova Studio</div>
+                        <div class="window-status" id="studioStatus">
+                            <span class="status-indicator status-ready"></span>
+                            <span class="status-text">Ready</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-body">
+                        <div class="studio-workspace">
+                            <div class="studio-input-group">
+                                <label for="speechText">Input Script</label>
+                                <textarea id="speechText" placeholder="Welcome to VoiceNova. Type or paste your script here, pick a voice from the library below, and click generate to synthesize life-like speech instantly.">Welcome to VoiceNova. Experience the future of neural voice synthesis. Type your text here and click generate to hear me speak.</textarea>
+                                <div class="char-counter"><span id="charCount">119</span>/500</div>
+                            </div>
+                            
+                            <div class="studio-controls-row">
+                                <div class="studio-control-item voice-selector-wrapper">
+                                    <label for="voiceSelect">AI Voice</label>
+                                    <div class="custom-select">
+                                        <select id="voiceSelect">
+                                            <option value="Nova" data-gender="female" data-style="Warm & Professional">Nova (Female - Warm)</option>
+                                            <option value="Aero" data-gender="male" data-style="Energetic & Bold">Aero (Male - Energetic)</option>
+                                            <option value="Echo" data-gender="non-binary" data-style="Neutral & Narration">Echo (Non-Binary - Calm)</option>
+                                            <option value="Solas" data-gender="female" data-style="Dramatic & Emotional">Solas (Female - Expressive)</option>
+                                            <option value="Vortex" data-gender="male" data-style="Deep & Cinematic">Vortex (Male - Cinematic)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="studio-control-item speed-slider-wrapper">
+                                    <label for="speedRange">Speed: <span id="speedVal">1.0x</span></label>
+                                    <input type="range" id="speedRange" min="0.5" max="2.0" step="0.1" value="1.0" class="premium-slider">
+                                </div>
+                            </div>
+                            
+                            <!-- Visualizer Waveform -->
+                            <div class="visualizer-container">
+                                <div class="visualizer-overlay" id="visualizerOverlay">
+                                    <i data-lucide="volume-2" class="pulse-icon"></i>
+                                    <span>Synthesize voice to play</span>
+                                </div>
+                                <canvas id="waveformCanvas"></canvas>
+                            </div>
+                            
+                            <div class="studio-actions">
+                                <button class="btn btn-primary btn-full" id="generateSpeechBtn">
+                                    <i data-lucide="sparkles" class="btn-icon"></i> 
+                                    <span id="generateBtnText">Generate Speech</span>
+                                </button>
+                                <button class="btn btn-secondary" id="downloadAudioBtn" disabled>
+                                    <i data-lucide="download" class="btn-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="section trusted-section">
+        <div class="container text-center">
+            <h2 class="sub-heading-text">TRUSTED BY 20,000+ CREATORS, STARTUPS AND ENTERPRISES</h2>
+            <div class="logos-grid">
+                <div class="logo-item"><i data-lucide="youtube" class="logo-icon-brand"></i><span>Creator.io</span></div>
+                <div class="logo-item"><i data-lucide="podcast" class="logo-icon-brand"></i><span>TalkFlow</span></div>
+                <div class="logo-item"><i data-lucide="twitch" class="logo-icon-brand"></i><span>StreamSphere</span></div>
+                <div class="logo-item"><i data-lucide="music-4" class="logo-icon-brand"></i><span>AudioLab</span></div>
+                <div class="logo-item"><i data-lucide="terminal" class="logo-icon-brand"></i><span>DevSaaS</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features-section" id="features">
+        <div class="container">
+            <div class="section-header text-center">
+                <div class="badge">Features</div>
+                <h2 class="section-title">Everything you need for <span class="gradient-text">studio-quality</span> audio</h2>
+                <p class="section-subtitle">Scale your content creation with premium features designed for professionals, developers, and businesses.</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1: Text to Speech -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="volume-2"></i>
+                    </div>
+                    <h3 class="feature-card-title">Text to Speech</h3>
+                    <p class="feature-card-desc">Converts text into lifelike speech in real-time. Choose from 200+ distinct voices across 30+ languages, retaining perfect emotional tone.</p>
+                </div>
+                
+                <!-- Feature 2: AI Voice Library -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="library"></i>
+                    </div>
+                    <h3 class="feature-card-title">AI Voice Library</h3>
+                    <p class="feature-card-desc">Access a curated gallery of high-fidelity synthetic voice profiles, segmented by age, gender, accent, tone, and intended use-case.</p>
+                </div>
+                
+                <!-- Feature 3: Voice Cloning -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-badge">Coming Soon</div>
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="mic"></i>
+                    </div>
+                    <h3 class="feature-card-title">Voice Cloning</h3>
+                    <p class="feature-card-desc">Clone any voice with high precision using a simple 10-second vocal sample. Replicate speech styles, accents, and pacing.</p>
+                </div>
+                
+                <!-- Feature 4: Multi-language Support -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <h3 class="feature-card-title">Multi-language Support</h3>
+                    <p class="feature-card-desc">Synthesize content natively in over 30 languages with correct accents and phonetic structures, empowering global audiences.</p>
+                </div>
+                
+                <!-- Feature 5: Fast Audio Generation -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3 class="feature-card-title">Fast Generation</h3>
+                    <p class="feature-card-desc">Experience lightning-fast generation speeds. Synthesize paragraphs in under 200ms using our state-of-the-art server farm.</p>
+                </div>
+                
+                <!-- Feature 6: API Access -->
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon-wrapper">
+                        <i data-lucide="code"></i>
+                    </div>
+                    <h3 class="feature-card-title">Developer API</h3>
+                    <p class="feature-card-desc">Integrate voice generation directly into your products, apps, or game pipelines with our robust, low-latency REST and WebSocket APIs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works-section" id="how-it-works">
+        <div class="container">
+            <div class="section-header text-center">
+                <div class="badge">Workflow</div>
+                <h2 class="section-title">Four steps to <span class="gradient-text">perfect audio</span></h2>
+                <p class="section-subtitle">Our streamlined studio UI takes you from script to professional voiceover in seconds.</p>
+            </div>
+            
+            <div class="steps-timeline">
+                <div class="step-card glass-panel">
+                    <div class="step-num">01</div>
+                    <div class="step-icon"><i data-lucide="file-text"></i></div>
+                    <h3 class="step-title">Write or Paste Text</h3>
+                    <p class="step-desc">Enter your script into our studio. Adjust formatting and split text blocks to insert natural pauses.</p>
+                </div>
+                
+                <div class="step-card glass-panel">
+                    <div class="step-num">02</div>
+                    <div class="step-icon"><i data-lucide="smile"></i></div>
+                    <h3 class="step-title">Select the Perfect Voice</h3>
+                    <p class="step-desc">Pick from 200+ distinct professional voices, adjust pitch and velocity to match your brand style.</p>
+                </div>
+                
+                <div class="step-card glass-panel">
+                    <div class="step-num">03</div>
+                    <div class="step-icon"><i data-lucide="sparkles"></i></div>
+                    <h3 class="step-title">Synthesize Instantly</h3>
+                    <p class="step-desc">Click generate. Our neural net synthesizes voice packets in seconds and renders audio waves.</p>
+                </div>
+                
+                <div class="step-card glass-panel">
+                    <div class="step-num">04</div>
+                    <div class="step-icon"><i data-lucide="download"></i></div>
+                    <h3 class="step-title">Download Studio MP3</h3>
+                    <p class="step-desc">Listen to the preview output, refine settings as needed, and export high-fidelity audio files.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header text-center">
+                <div class="badge">Pricing</div>
+                <h2 class="section-title">Simple plans for <span class="gradient-text">every creator</span></h2>
+                <p class="section-subtitle">Start building for free, then scale as your business grows. No hidden fees.</p>
+                
+                <!-- Billing Toggle Switcher -->
+                <div class="billing-switcher-container">
+                    <span class="switcher-label" id="monthlyLabel">Monthly</span>
+                    <label class="switch">
+                        <input type="checkbox" id="billingToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switcher-label active" id="annualLabel">Billed Annually <span class="discount-pill">Save 20%</span></span>
+                </div>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card glass-panel">
+                    <div class="pricing-header">
+                        <h3 class="pricing-plan-name">Free</h3>
+                        <p class="pricing-plan-desc">For testing and personal hobby projects.</p>
+                        <div class="pricing-price">
+                            <span class="price-currency">$</span>
+                            <span class="price-amount" data-monthly="0" data-annual="0">0</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li><i data-lucide="check" class="check-icon"></i> 10,000 Characters / mo</li>
+                            <li><i data-lucide="check" class="check-icon"></i> 3 Standard AI Voices</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Standard Quality</li>
+                            <li class="disabled"><i data-lucide="x" class="x-icon"></i> Commercial Rights</li>
+                            <li class="disabled"><i data-lucide="x" class="x-icon"></i> Voice Cloning</li>
+                            <li class="disabled"><i data-lucide="x" class="x-icon"></i> API Access</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer">
+                        <a href="signup.html" class="btn btn-outline btn-full openGetStarted">Get Started Free</a>
+                    </div>
+                </div>
+
+                <!-- Starter Plan -->
+                <div class="pricing-card glass-panel">
+                    <div class="pricing-header">
+                        <h3 class="pricing-plan-name">Starter</h3>
+                        <p class="pricing-plan-desc">For indie podcasters and video creators.</p>
+                        <div class="pricing-price">
+                            <span class="price-currency">$</span>
+                            <span class="price-amount" data-monthly="19" data-annual="15">15</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li><i data-lucide="check" class="check-icon"></i> 100,000 Characters / mo</li>
+                            <li><i data-lucide="check" class="check-icon"></i> 10+ Standard AI Voices</li>
+                            <li><i data-lucide="check" class="check-icon"></i> High Quality</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Commercial Rights</li>
+                            <li class="disabled"><i data-lucide="x" class="x-icon"></i> Voice Cloning</li>
+                            <li class="disabled"><i data-lucide="x" class="x-icon"></i> API Access</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer">
+                        <a href="signup.html" class="btn btn-outline btn-full openGetStarted">Choose Starter</a>
+                    </div>
+                </div>
+
+                <!-- Pro Plan (Popular) -->
+                <div class="pricing-card glass-panel popular-card">
+                    <div class="popular-ribbon">POPULAR</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-plan-name">Pro</h3>
+                        <p class="pricing-plan-desc">For professional creators and small studios.</p>
+                        <div class="pricing-price">
+                            <span class="price-currency">$</span>
+                            <span class="price-amount" data-monthly="49" data-annual="39">39</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li><i data-lucide="check" class="check-icon"></i> 500,000 Characters / mo</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Unlimited Standard Voices</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Ultra High Quality</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Commercial Rights</li>
+                            <li><i data-lucide="check" class="check-icon"></i> 3 Voice Clones</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Basic API Access</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer">
+                        <a href="signup.html" class="btn btn-primary btn-full btn-glow-hover openGetStarted">Choose Pro</a>
+                    </div>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="pricing-card glass-panel">
+                    <div class="pricing-header">
+                        <h3 class="pricing-plan-name">Business</h3>
+                        <p class="pricing-plan-desc">For scaling teams and dev pipelines.</p>
+                        <div class="pricing-price">
+                            <span class="price-currency">$</span>
+                            <span class="price-amount" data-monthly="149" data-annual="119">119</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="pricing-body">
+                        <ul class="pricing-features">
+                            <li><i data-lucide="check" class="check-icon"></i> 2,000,000 Characters / mo</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Unlimited Standard Voices</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Ultra High Quality</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Commercial Rights</li>
+                            <li><i data-lucide="check" class="check-icon"></i> 10 Voice Clones</li>
+                            <li><i data-lucide="check" class="check-icon"></i> Priority API & Dedicated Support</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer">
+                        <a href="signup.html" class="btn btn-outline btn-full openGetStarted">Choose Business</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <div class="badge">Testimonials</div>
+                <h2 class="section-title">What creators say <span class="gradient-text">about VoiceNova</span></h2>
+                <p class="section-subtitle">Hear how podcasters, developers, and creators are transforming their production workflows.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card glass-panel">
+                    <div class="stars-row">
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                    </div>
+                    <p class="testimonial-quote">"The voice quality is unmatched. I cloned my own voice in 10 seconds, and it sounds exactly like me. My YouTube production workflow was literally cut in half, leaving more time for edits."</p>
+                    <div class="testimonial-user">
+                        <div class="user-avatar user-1">SJ</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Sarah Jenkins</h4>
+                            <p class="user-role">Podcast Host & YouTuber</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card glass-panel">
+                    <div class="stars-row">
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                    </div>
+                    <p class="testimonial-quote">"VoiceNova's API is incredibly fast. We integrated it into our SaaS application to provide accessibility narrations. Syntheses complete in under 200ms with amazing reliability."</p>
+                    <div class="testimonial-user">
+                        <div class="user-avatar user-2">MC</div>
+                        <div class="user-info">
+                            <h4 class="user-name">Marcus Chen</h4>
+                            <p class="user-role">VP of Engineering, EdTech</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card glass-panel">
+                    <div class="stars-row">
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                        <i data-lucide="star" class="star-filled"></i>
+                    </div>
+                    <p class="testimonial-quote">"I was skeptical about AI voice narration, but the emotional range of these models is stunning. They sound warm and natural, not robotic at all. Best investment for our content marketing."</p>
+                    <div class="testimonial-user">
+                        <div class="user-avatar user-3">DM</div>
+                        <div class="user-info">
+                            <h4 class="user-name">David Miller</h4>
+                            <p class="user-role">Founder, PodCraft Agency</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq-section" id="faq">
+        <div class="container">
+            <div class="section-header text-center">
+                <div class="badge">FAQ</div>
+                <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+                <p class="section-subtitle">Got questions? We've got answers. Explore how our neural synthesizer operates.</p>
+            </div>
+            
+            <div class="faq-accordion-container">
+                <div class="faq-item glass-panel">
+                    <button class="faq-question">
+                        <span>How does the 10-second voice cloning work?</span>
+                        <i data-lucide="chevron-down" class="faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Voice cloning works by uploading a short audio recording (10 seconds or more) of your voice. Our advanced neural model extracts key characteristics such as your pitch, pronunciation pacing, accent, and emotional tone, generating a unique mathematical voice model that can speak any text while retaining your identity.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-panel">
+                    <button class="faq-question">
+                        <span>Can I use the generated voiceovers for commercial projects?</span>
+                        <i data-lucide="chevron-down" class="faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes, all paid plans (Starter, Pro, and Business) include a full commercial license. You can use generated voiceovers in commercial advertisements, monetized YouTube videos, audiobooks, client work, and broadcasts without royalty fees.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-panel">
+                    <button class="faq-question">
+                        <span>What languages are supported by VoiceNova?</span>
+                        <i data-lucide="chevron-down" class="faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>VoiceNova supports speech generation in over 30 languages, including English, Spanish, French, German, Japanese, Portuguese, Chinese, Italian, Korean, and Hindi. The synthesizer automatically matches regional accents and inflections to guarantee native pronunciation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-panel">
+                    <button class="faq-question">
+                        <span>How does the API integration work?</span>
+                        <i data-lucide="chevron-down" class="faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our developer API lets you integrate VoiceNova with standard HTTP REST calls or real-time WebSockets. You simply send a POST request with your text script and chosen voice ID, and our API streams back the audio bytes (MP3, WAV, or OGG) within milliseconds. Comprehensive documentation is provided for Node.js, Python, and Go.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-panel">
+                    <button class="faq-question">
+                        <span>Is there a discount for annual billing?</span>
+                        <i data-lucide="chevron-down" class="faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely! When you choose annual billing, you receive an immediate 20% discount on your subscription plan. For example, our Pro plan is $49/month when paid monthly, but only $39/month when billed annually ($468 charged once a year).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section class="section api-section" id="api">
+        <div class="container api-container">
+            <div class="api-content">
+                <div class="badge">Developers</div>
+                <h2 class="section-title">Integrate VoiceNova <span class="gradient-text">in Minutes</span></h2>
+                <p class="section-subtitle">A simple, developer-friendly API to generate speech. Stream audio bytes in real-time or process batch generation jobs.</p>
+                <ul class="api-features-list">
+                    <li><i data-lucide="code-2" class="check-icon"></i> <span>REST & WebSockets endpoints</span></li>
+                    <li><i data-lucide="key-round" class="check-icon"></i> <span>Secure Bearer token auth</span></li>
+                    <li><i data-lucide="gauge" class="check-icon"></i> <span>Ultra-low latency responses (&lt;200ms)</span></li>
+                </ul>
+                <div class="api-buttons">
+                    <a href="#" class="btn btn-primary btn-glow-hover">Read API Docs</a>
+                    <a href="#" class="btn btn-secondary">Get API Key</a>
+                </div>
+            </div>
+            
+            <div class="api-graphic">
+                <div class="code-editor glass-panel">
+                    <div class="code-editor-header">
+                        <div class="window-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <div class="window-title">synthesize.js</div>
+                        <div class="window-lang">JavaScript</div>
+                    </div>
+                    <div class="code-editor-body">
+                        <pre><code><span class="code-keyword">const</span> text = <span class="code-string">"Experience the next-gen speech synthesis."</span>;
+<span class="code-keyword">const</span> voiceId = <span class="code-string">"nova-female-warm"</span>;
+
+<span class="code-comment">// Synthesize script using VoiceNova API</span>
+<span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'https://api.voicenova.ai/v1/tts'</span>, {
+    method: <span class="code-string">'POST'</span>,
+    headers: {
+        <span class="code-string">'Authorization'</span>: <span class="code-string">'Bearer VN_API_KEY'</span>,
+        <span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span>
+    },
+    body: JSON.<span class="code-function">stringify</span>({ text, voiceId, format: <span class="code-string">'mp3'</span> })
+});
+
+<span class="code-keyword">const</span> audioBlob = <span class="code-keyword">await</span> response.<span class="code-function">blob</span>();
+<span class="code-keyword">const</span> audioUrl = URL.<span class="code-function">createObjectURL</span>(audioBlob);
+<span class="code-keyword">new</span> <span class="code-class">Audio</span>(audioUrl).<span class="code-function">play</span>();</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container contact-container">
+            <div class="contact-card glass-panel">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2 class="contact-title">Let's talk <span class="gradient-text">about voices</span></h2>
+                        <p class="contact-desc">Have custom enterprise volume requirements or questions about integrations? Drop us a line and our expert team will reach out within 24 hours.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-detail-item">
+                                <i data-lucide="mail"></i>
+                                <span>support@voicenova.ai</span>
+                            </div>
+                            <div class="contact-detail-item">
+                                <i data-lucide="map-pin"></i>
+                                <span>San Francisco, CA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form-body" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">Name</label>
+                                <input type="text" id="contactName" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" rows="5" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-glow-hover">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-banner glass-panel">
+                <div class="cta-glow"></div>
+                <div class="cta-content">
+                    <h2 class="cta-title">Start Creating AI Voices Today</h2>
+                    <p class="cta-desc">Transform your content creation workflow with the most natural sounding voices on the market. Sign up for a free account, no credit card required.</p>
+                    <div class="cta-buttons">
+                        <a href="signup.html" class="btn btn-primary btn-lg btn-glow-hover openGetStarted">Get Started Free</a>
+                        <a href="#pricing" class="btn btn-secondary btn-lg">View Pricing</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand-col">
+                <a href="#" class="logo footer-logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 20V20C8 13.3726 13.3726 8 20 8V8C26.6274 8 32 13.3726 32 20V20C32 26.6274 26.6274 32 20 32V32C13.3726 32 8 26.6274 8 20Z" stroke="url(#paint0_linear)" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M14 20V20" stroke="url(#paint1_linear)" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M20 13V27" stroke="url(#paint2_linear)" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M26 17V23" stroke="url(#paint3_linear)" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">VoiceNova</span>
+                </a>
+                <p class="footer-brand-desc">Create. Clone. Speak. Synthesizing the future of human vocal expression through neural AI.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i data-lucide="twitter"></i></a>
+                    <a href="#" class="social-link"><i data-lucide="github"></i></a>
+                    <a href="#" class="social-link"><i data-lucide="linkedin"></i></a>
+                    <a href="#" class="social-link"><i data-lucide="youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links-col">
+                <h4 class="footer-col-title">Product</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Voice Library</a></li>
+                    <li><a href="#">Voice Cloning</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links-col">
+                <h4 class="footer-col-title">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Guides & Tutorials</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">System Status</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-col">
+                <h4 class="footer-col-title">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press Kit</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="container footer-bottom">
+            <p>&copy; 2026 VoiceNova Inc. All rights reserved. Created for premium AI audio solutions.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card glass-panel">
+            <button class="modal-close" id="closeLoginBtn"><i data-lucide="x"></i></button>
+            <h3 class="modal-title">Welcome Back</h3>
+            <p class="modal-subtitle">Login to access VoiceNova Studio</p>
+            
+            <form class="modal-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full btn-glow-hover">Log In</button>
+            </form>
+            
+            <div class="modal-divider"><span>or continue with</span></div>
+            
+            <div class="modal-socials">
+                <button class="btn btn-outline btn-social"><i data-lucide="chrome" class="btn-icon"></i> Google</button>
+                <button class="btn btn-outline btn-social"><i data-lucide="github" class="btn-icon"></i> GitHub</button>
+            </div>
+            
+            <p class="modal-footer-text">Don't have an account? <span id="switchToSignUp" class="modal-link">Sign Up</span></p>
+        </div>
+    </div>
+
+    <!-- Get Started / Sign Up Modal -->
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-card glass-panel">
+            <button class="modal-close" id="closeSignupBtn"><i data-lucide="x"></i></button>
+            <h3 class="modal-title">Create Account</h3>
+            <p class="modal-subtitle">Start generating AI voices for free</p>
+            
+            <form class="modal-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Alex Morgan" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a strong password" required>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" required> I agree to the <a href="#" class="modal-link-inline">Terms</a> & <a href="#" class="modal-link-inline">Privacy</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full btn-glow-hover">Create Free Account</button>
+            </form>
+            
+            <div class="modal-divider"><span>or sign up with</span></div>
+            
+            <div class="modal-socials">
+                <button class="btn btn-outline btn-social"><i data-lucide="chrome" class="btn-icon"></i> Google</button>
+                <button class="btn btn-outline btn-social"><i data-lucide="github" class="btn-icon"></i> GitHub</button>
+            </div>
+            
+            <p class="modal-footer-text">Already have an account? <span id="switchToLogin" class="modal-link">Log In</span></p>
+        </div>
+    </div>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

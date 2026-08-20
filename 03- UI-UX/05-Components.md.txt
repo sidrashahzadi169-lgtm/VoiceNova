@@ -1,0 +1,15 @@
+Components
+
+- Navbar
+- Footer
+- Hero Section
+- Feature Card
+- Pricing Card
+- Dashboard Sidebar
+- Audio Player
+- Voice Card
+- Generate Button
+- Profile Card
+- Notification Panel
+- Modal
+- Toast Messages

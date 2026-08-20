@@ -1,0 +1,20 @@
+Style:
+- Modern
+- Premium
+- Glassmorphism
+- Rounded Cards
+- Soft Shadows
+
+Buttons:
+- Primary
+- Secondary
+- Outline
+
+Cards:
+- Rounded 16px
+
+Icons:
+- Simple Line Icons
+
+Spacing:
+- 8px Grid System

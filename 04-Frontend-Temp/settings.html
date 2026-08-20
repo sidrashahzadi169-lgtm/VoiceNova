@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console Settings - VoiceNova</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body-tag">
+
+    <!-- Ambient Background Waveform Canvas -->
+    <canvas id="bgWaveformCanvas" class="bg-waveform-canvas"></canvas>
+
+    <!-- Ambient Background Glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="dashboard-layout">
+        
+        <!-- ==========================================================================
+           LEFT SIDEBAR NAVIGATION
+           ========================================================================== -->
+        <aside class="dash-sidebar" id="dashSidebar">
+            <div class="sidebar-brand-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 20V20C8 13.3726 13.3726 8 20 8V8C26.6274 8 32 13.3726 32 20V20C32 26.6274 26.6274 32 20 32V32C13.3726 32 8 26.6274 8 20Z" stroke="url(#paint0_linear)" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M14 20V20" stroke="url(#paint1_linear)" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M20 13V27" stroke="url(#paint2_linear)" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M26 17V23" stroke="url(#paint3_linear)" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">VoiceNova</span>
+                </a>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Studio</div>
+                <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></a>
+                <a href="studio.html" class="sidebar-link"><i data-lucide="mic"></i> <span>Generate Voice</span></a>
+                <a href="library.html" class="sidebar-link"><i data-lucide="users"></i> <span>Voice Library</span></a>
+                <a href="projects.html" class="sidebar-link"><i data-lucide="folder-open"></i> <span>My Projects</span></a>
+                <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3"></i> <span>Analytics</span></a>
+                <a href="#" class="sidebar-link"><i data-lucide="download-cloud"></i> <span>Downloads</span></a>
+                
+                <div class="nav-section-title">Developer & Account</div>
+                <a href="api.html" class="sidebar-link"><i data-lucide="code-2"></i> <span>API Management</span></a>
+                <a href="billing.html" class="sidebar-link"><i data-lucide="credit-card"></i> <span>Billing</span></a>
+                <a href="#" class="sidebar-link active"><i data-lucide="settings"></i> <span>Settings</span></a>
+                <a href="help.html" class="sidebar-link"><i data-lucide="help-circle"></i> <span>Help & Support</span></a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="index.html" class="sidebar-link logout-link"><i data-lucide="log-out"></i> <span>Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- ==========================================================================
+           MAIN CONTENT AREA
+           ========================================================================== -->
+        <main class="dash-main">
+            
+            <!-- Top Header -->
+            <header class="dash-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggleBtn"><i data-lucide="menu"></i></button>
+                    <!-- Breadcrumbs -->
+                    <div class="studio-breadcrumbs">
+                        <span class="bread-root">Studio</span>
+                        <i data-lucide="chevron-right" class="bread-sep"></i>
+                        <span class="bread-active">Console Settings</span>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <button class="btn btn-secondary assistant-btn" id="headerAssistantBtn">
+                        <i data-lucide="sparkles"></i> <span>AI Assistant</span>
+                    </button>
+                    
+                    <button class="icon-notification-btn" aria-label="Notifications" id="notificationBtn">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-indicator"></span>
+                    </button>
+                    
+                    <div class="user-avatar-wrapper" style="cursor:pointer;" onclick="window.location.href='profile.html'">
+                        <div class="avatar-ring">
+                            <span class="avatar-letter">S</span>
+                            <span class="avatar-status-dot"></span>
+                        </div>
+                        <div class="user-profile-details">
+                            <span class="profile-name">Sidra</span>
+                            <span class="profile-plan-badge">Pro</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Workspace container -->
+            <div class="dash-workspace">
+                
+                <!-- Main settings container divided into left tabs sidebar & right details panes -->
+                <div class="settings-workspace-split">
+                    
+                    <!-- Settings subtabs navigation menu -->
+                    <aside class="settings-sub-tabs glass-panel">
+                        <button class="settings-tab-link active" data-settings-pane="general-appearance">
+                            <i data-lucide="settings"></i> <span>General & Theme</span>
+                        </button>
+                        <button class="settings-tab-link" data-settings-pane="notifications-ai">
+                            <i data-lucide="bell"></i> <span>Notifications & AI</span>
+                        </button>
+                        <button class="settings-tab-link" data-settings-pane="security-sessions">
+                            <i data-lucide="lock"></i> <span>Security & Sessions</span>
+                        </button>
+                        <button class="settings-tab-link" data-settings-pane="api-storage">
+                            <i data-lucide="code-2"></i> <span>API Key & Storage</span>
+                        </button>
+                    </aside>
+
+                    <!-- Settings panels content scroll column -->
+                    <div class="settings-panes-container">
+                        
+                        <!-- Panel group 1: General & Appearance -->
+                        <div class="settings-pane active" id="paneGeneralAppearance">
+                            
+                            <!-- General Settings -->
+                            <div class="glass-panel settings-card-group">
+                                <h3 class="settings-group-title"><i data-lucide="user"></i> General Settings</h3>
+                                
+                                <form id="settingsGeneralForm" class="settings-fields-form">
+                                    <div class="form-row-split">
+                                        <div class="form-group">
+                                            <label for="setFullName">Full Name</label>
+                                            <input type="text" id="setFullName" value="Sidra Rehman" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setUsername">Username</label>
+                                            <input type="text" id="setUsername" value="sidra_nova" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row-split">
+                                        <div class="form-group">
+                                            <label for="setLanguage">System Language</label>
+                                            <div class="custom-select">
+                                                <select id="setLanguage">
+                                                    <option value="en">English (US)</option>
+                                                    <option value="ur">Urdu (PK)</option>
+                                                    <option value="ar">Arabic (AE)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setTimezone">Time Zone</label>
+                                            <div class="custom-select">
+                                                <select id="setTimezone">
+                                                    <option value="karachi">Asia/Karachi (GMT+5)</option>
+                                                    <option value="london">Europe/London (GMT+0)</option>
+                                                    <option value="newyork">America/New_York (GMT-5)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="setDateFormat">Date Format</label>
+                                        <div class="custom-select">
+                                            <select id="setDateFormat">
+                                                <option value="dd-mm-yyyy">DD/MM/YYYY (15/07/2026)</option>
+                                                <option value="mm-dd-yyyy">MM/DD/YYYY (07/15/2026)</option>
+                                                <option value="yyyy-mm-dd">YYYY-MM-DD (2026-07-15)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-glow-hover">Save General Settings</button>
+                                </form>
+                            </div>
+
+                            <!-- Appearance Settings -->
+                            <div class="glass-panel settings-card-group" style="margin-top: 24px;">
+                                <h3 class="settings-group-title"><i data-lucide="palette"></i> Console Appearance</h3>
+                                
+                                <div class="settings-fields-form">
+                                    <div class="form-group">
+                                        <label>Interface Theme Mode</label>
+                                        <div class="theme-option-row">
+                                            <div class="theme-box active" data-theme-mode="dark">
+                                                <i data-lucide="moon"></i>
+                                                <span>Dark Mode</span>
+                                            </div>
+                                            <div class="theme-box" data-theme-mode="light">
+                                                <i data-lucide="sun"></i>
+                                                <span>Light Mode</span>
+                                            </div>
+                                            <div class="theme-box" data-theme-mode="system">
+                                                <i data-lucide="monitor"></i>
+                                                <span>System Theme</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="margin-top: 16px;">
+                                        <label>Dashboard Accent Color</label>
+                                        <div style="display:flex; gap:12px; margin-top:8px;">
+                                            <button class="accent-dot-btn active" data-accent="purple" style="background:#6C63FF;" title="Purple"></button>
+                                            <button class="accent-dot-btn" data-accent="cyan" style="background:#00C2FF;" title="Cyan"></button>
+                                            <button class="accent-dot-btn" data-accent="green" style="background:#22C55E;" title="Green"></button>
+                                            <button class="accent-dot-btn" data-accent="pink" style="background:#EC4899;" title="Pink"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel group 2: Notifications & AI Preferences -->
+                        <div class="settings-pane" id="paneNotificationsAI" style="display: none;">
+                            
+                            <!-- Notifications -->
+                            <div class="glass-panel settings-card-group">
+                                <h3 class="settings-group-title"><i data-lucide="bell"></i> Notification Settings</h3>
+                                
+                                <div class="settings-switches-list">
+                                    <div class="settings-switch-item">
+                                        <div class="switch-item-meta">
+                                            <span class="switch-title">Email Notifications</span>
+                                            <span class="switch-desc">Receive account security updates and usage limit alerts.</span>
+                                        </div>
+                                        <label class="switch-control">
+                                            <input type="checkbox" checked id="switchEmailNotif">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="settings-switch-item">
+                                        <div class="switch-item-meta">
+                                            <span class="switch-title">Browser Push Notifications</span>
+                                            <span class="switch-desc">Show desktop notifications when neural voice synthesis finishes.</span>
+                                        </div>
+                                        <label class="switch-control">
+                                            <input type="checkbox" checked id="switchPushNotif">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="settings-switch-item">
+                                        <div class="switch-item-meta">
+                                            <span class="switch-title">Marketing Newsletters</span>
+                                            <span class="switch-desc">Receive emails on our new features releases and voice actor pack updates.</span>
+                                        </div>
+                                        <label class="switch-control">
+                                            <input type="checkbox" id="switchMarketingNotif">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="settings-switch-item">
+                                        <div class="switch-item-meta">
+                                            <span class="switch-title">Weekly System Summaries</span>
+                                            <span class="switch-desc">Get a weekly report of characters generated and project quota limits.</span>
+                                        </div>
+                                        <label class="switch-control">
+                                            <input type="checkbox" checked id="switchUpdatesNotif">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Preferences -->
+                            <div class="glass-panel settings-card-group" style="margin-top: 24px;">
+                                <h3 class="settings-group-title"><i data-lucide="cpu"></i> AI Studio Engine Preferences</h3>
+                                
+                                <div class="settings-fields-form">
+                                    <div class="form-row-split">
+                                        <div class="form-group">
+                                            <label for="setDefVoice">Default Studio Voice</label>
+                                            <div class="custom-select">
+                                                <select id="setDefVoice">
+                                                    <option value="Nova">Nova (Female - US)</option>
+                                                    <option value="Aero">Aero (Male - UK)</option>
+                                                    <option value="Amina">Amina (Urdu - PK)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setDefFormat">Default Output Export</label>
+                                            <div class="custom-select">
+                                                <select id="setDefFormat">
+                                                    <option value="mp3">MPEG Audio (MP3 320kbps)</option>
+                                                    <option value="wav">Lossless Waveform (WAV 48kHz)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row-split">
+                                        <div class="form-group">
+                                            <label for="setDefQuality">Voice Synthesis Quality</label>
+                                            <div class="custom-select">
+                                                <select id="setDefQuality">
+                                                    <option value="high">Neural Standard (Fastest)</option>
+                                                    <option value="ultra">Neural HD+ (Lossless Resampling)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="justify-content: flex-end; display: flex; flex-direction: column;">
+                                            <div class="settings-switch-item" style="border:none; padding: 0; background:transparent;">
+                                                <div class="switch-item-meta" style="margin-right:12px;">
+                                                    <span class="switch-title" style="font-size:0.72rem; text-transform:uppercase; color:var(--color-text-muted);">Auto Save Studio Drafts</span>
+                                                </div>
+                                                <label class="switch-control">
+                                                    <input type="checkbox" checked id="switchAutoSave">
+                                                    <span class="switch-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary btn-glow-hover" id="saveAiSettingsBtn" style="margin-top: 12px;">Save Engine Settings</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel group 3: Security & Sessions -->
+                        <div class="settings-pane" id="paneSecuritySessions" style="display: none;">
+                            
+                            <!-- Privacy & Security options -->
+                            <div class="glass-panel settings-card-group">
+                                <h3 class="settings-group-title"><i data-lucide="shield-check"></i> Security Configurations</h3>
+                                
+                                <form id="settingsPasswordForm" class="settings-fields-form">
+                                    <h4 class="settings-sub-title">Change Account Password</h4>
+                                    
+                                    <div class="form-group">
+                                        <label for="setCurrPass">Current Account Password</label>
+                                        <input type="password" id="setCurrPass" placeholder="••••••••" required>
+                                    </div>
+                                    
+                                    <div class="form-row-split">
+                                        <div class="form-group">
+                                            <label for="setNewPass">New Secure Password</label>
+                                            <input type="password" id="setNewPass" placeholder="••••••••" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setConfPass">Confirm Secure Password</label>
+                                            <input type="password" id="setConfPass" placeholder="••••••••" required>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-outline">Change Account Password</button>
+                                </form>
+
+                                <div class="two-factor-verification" style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.03); padding-top:20px;">
+                                    <h4 class="settings-sub-title">Two-Factor Authentication (2FA)</h4>
+                                    <p class="settings-help-text">Inject an extra security layer into your dashboard using TOTP codes from mobile auth applications.</p>
+                                    <div class="two-factor-toggle-row">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <i data-lucide="shield-alert" id="icon2faState" style="color:var(--color-error); width:20px;height:20px;"></i>
+                                            <span style="font-size:0.88rem; font-weight:600;" id="label2faState">Status: Disabled</span>
+                                        </div>
+                                        <button class="btn btn-secondary btn-sm" id="btnToggle2FA">Enable 2FA</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sessions & Account Deletion -->
+                            <div class="glass-panel settings-card-group" style="margin-top: 24px;">
+                                <h3 class="settings-group-title"><i data-lucide="monitor"></i> Session Log & Device Management</h3>
+                                
+                                <div class="sessions-list" style="margin-top: 16px;">
+                                    <div class="session-item">
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <i data-lucide="monitor" style="color:var(--color-secondary);"></i>
+                                            <div style="display:flex; flex-direction:column;">
+                                                <span style="font-size:0.82rem; font-weight:600;">Chrome browser on Windows</span>
+                                                <span style="font-size:0.68rem; color:var(--color-text-muted);">Karachi, Pakistan • Active Now</span>
+                                            </div>
+                                        </div>
+                                        <span class="status-pill status-pill-success" style="font-size:0.6rem; padding:2px 8px;">Current</span>
+                                    </div>
+
+                                    <div class="session-item">
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <i data-lucide="smartphone" style="color:var(--color-text-muted);"></i>
+                                            <div style="display:flex; flex-direction:column;">
+                                                <span style="font-size:0.82rem; font-weight:600;">Safari browser on iPhone</span>
+                                                <span style="font-size:0.68rem; color:var(--color-text-muted);">Lahore, Pakistan • 2 days ago</span>
+                                            </div>
+                                        </div>
+                                        <button class="table-action-btn revoke-session-btn" title="Revoke Device"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="session-actions-row" style="display:flex; justify-content:space-between; margin-top:20px; align-items:center; border-top: 1px solid rgba(255,255,255,0.03); padding-top:20px;">
+                                    <button class="btn btn-outline" id="btnRevokeAll">Revoke Other Sessions</button>
+                                    <button class="btn btn-outline color-red-btn" id="btnDeleteAccount" style="background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.2); color:var(--color-error);"><i data-lucide="alert-triangle"></i> Delete Account</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel group 4: API Keys & Storage cache -->
+                        <div class="settings-pane" id="paneApiStorage" style="display: none;">
+                            
+                            <!-- API Key Settings -->
+                            <div class="glass-panel settings-card-group">
+                                <h3 class="settings-group-title"><i data-lucide="key"></i> Developer API Settings</h3>
+                                <p class="settings-help-text" style="margin-top:0;">Access the deep voice synthesis engine programmatically using token API keys.</p>
+                                
+                                <div class="settings-fields-form" style="margin-top: 16px;">
+                                    <div class="form-group">
+                                        <label>Your Project API Key</label>
+                                        <div class="api-key-copy-row" style="display:flex; gap:10px;">
+                                            <input type="password" id="inputApiKey" class="api-masked-field" value="vn_live_d84f9328a9b2d83c27e8a931d8e12c80" readonly style="flex:1; font-family:monospace; font-size:0.82rem;">
+                                            <button class="btn btn-secondary btn-icon-only" id="btnToggleApiMask" title="Reveal API Key"><i data-lucide="eye" style="width:14px;height:14px;"></i></button>
+                                            <button class="btn btn-secondary btn-icon-only" id="btnCopyApiKey" title="Copy Key"><i data-lucide="copy" style="width:14px;height:14px;"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="api-key-actions" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+                                        <button class="btn btn-outline" id="btnRegenerateKey">Regenerate Key</button>
+                                        <div class="api-quota-text" style="font-size:0.82rem; color:var(--color-text-muted);">
+                                            Monthly Limits: <strong style="color:var(--color-secondary);">12,450 / 50,000 requests</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Storage cache settings -->
+                            <div class="glass-panel settings-card-group" style="margin-top: 24px;">
+                                <h3 class="settings-group-title"><i data-lucide="database"></i> Cloud Space Storage Settings</h3>
+                                
+                                <div class="storage-details" style="margin-top: 12px;">
+                                    <div class="storage-text-row">
+                                        <span>45.2 MB used</span>
+                                        <span>1.0 GB limit</span>
+                                    </div>
+                                    <div class="progress-bar-track">
+                                        <div class="progress-bar-fill fill-secondary" style="width: 4.5%;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="storage-actions" style="display:flex; gap:12px; margin-top:24px; border-top: 1px solid rgba(255,255,255,0.03); padding-top:20px;">
+                                    <button class="btn btn-outline" id="btnClearCacheBtn" style="flex:1;"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> Clear Browser Cache</button>
+                                    <button class="btn btn-outline" id="btnDeleteOldBtn" style="flex:1; border-color:rgba(239,68,68,0.15); color:var(--color-error);"><i data-lucide="trash" style="width:14px;height:14px;"></i> Delete Old Projects</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="dash-footer">
+                <div class="footer-left">Version 1.0.0-Beta</div>
+                <div class="footer-right">
+                    <a href="#">Privacy Policy</a>
+                    <span class="sep">•</span>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </footer>
+        </main>
+
+    </div>
+
+    <!-- Floating AI Assistant FAB -->
+    <button class="ai-assistant-fab" id="aiAssistantFab" aria-label="Open AI Assistant">
+        <i data-lucide="sparkles"></i>
+        <span class="fab-pulse-ring"></span>
+    </button>
+
+    <!-- Chat Overlay card -->
+    <div class="ai-assistant-overlay" id="aiAssistantOverlay">
+        <div class="assistant-chat-card glass-panel">
+            <div class="chat-header">
+                <div class="header-user">
+                    <div class="assistant-avatar"><i data-lucide="sparkles"></i></div>
+                    <div class="avatar-info">
+                        <span class="assistant-name">Nova Assistant</span>
+                        <span class="assistant-status">Online</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" id="chatCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="chat-message assistant-msg">
+                    <p>Hello Sidra! Looking to adjust configurations? Ask me about regenerating API tokens, clearing local cache files, or toggling dark mode.</p>
+                </div>
+            </div>
+            
+            <form class="chat-footer" id="chatFormInput">
+                <input type="text" id="chatInputMessage" placeholder="Ask to regenerate API keys, disable browser notifications, or delete old WAV audio..." required>
+                <button type="submit" class="chat-send-btn"><i data-lucide="send"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <!-- Custom JavaScript -->
+    <script src="settings.js"></script>
+</body>
+</html>

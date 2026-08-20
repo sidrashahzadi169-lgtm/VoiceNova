@@ -1,0 +1,22 @@
+Project: VoiceNova
+
+Main Competitors:
+- ElevenLabs
+- PlayHT
+- Murf AI
+- Speechify
+- LOVO AI
+
+Strengths of Competitors:
+- High-quality AI voices
+- Fast voice generation
+- Multiple languages
+- API access
+- Voice cloning
+
+VoiceNova Advantage:
+- Better support for Urdu
+- Better support for Arabic
+- Easy-to-use interface
+- Affordable pricing
+- Creator-focused tools

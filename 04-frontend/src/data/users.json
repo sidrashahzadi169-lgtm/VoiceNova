@@ -1,0 +1,13 @@
+[
+  {
+    "id": "e8af8b69-305f-44fa-a9ed-9dfac22edbe2",
+    "name": "sidra",
+    "email": "sidra123@gmail.com",
+    "salt": "d02bb5f8d6dcac2dc599700f3211064d",
+    "hash": "4e6463b310950518ee38abe2e8853e45495103b7ae5b71db03c2820a8bdc4276a07246363076feee4341505d3a54321c69dba4ff49a4b854944e21b972f4783c",
+    "plan": "Free Trial",
+    "registered": "2026-07-03T03:28:31.932Z",
+    "status": "Active",
+    "verified": true
+  }
+]

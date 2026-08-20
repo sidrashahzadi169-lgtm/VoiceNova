@@ -1,0 +1,23 @@
+[
+  {
+    "id": 101,
+    "user": "Alex Morgan",
+    "cat": "Voice Cloning",
+    "subject": "Model stuck at 80%",
+    "date": "Today",
+    "priority": "High",
+    "msg": "I uploaded my dataset audio clips, but the voice model cloning is stuck at 80% capacity for 2 hours.",
+    "status": "Open"
+  },
+  {
+    "id": 102,
+    "user": "Sarah Jenkins",
+    "cat": "Billing",
+    "subject": "Requesting VAT Invoice COPY",
+    "date": "Yesterday",
+    "priority": "Medium",
+    "msg": "Please send a copy of Invoice INV-2026-006 with our VAT details added.",
+    "status": "Resolved",
+    "reply": "reply"
+  }
+]

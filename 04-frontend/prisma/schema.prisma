@@ -1,0 +1,227 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Users Model (Authentications & Profile Settings)
+model User {
+  id                 String            @id @default(uuid()) @db.Uuid
+  name               String
+  email              String            @unique
+  salt               String
+  hash               String
+  plan               String            @default("Free Trial")
+  status             String            @default("Active") // Active, Suspended
+  verified           Boolean           @default(false)
+  verificationToken  String?
+  resetToken         String?
+  resetExpiry        DateTime?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  projects           Project[]
+  generations        VoiceGeneration[]
+  subscriptions      Subscription[]
+  payments           Payment[]
+  apiKeys            APIKey[]
+  analytics          UsageAnalytics[]
+  notifications      Notification[]
+  activityLogs       ActivityLog[]
+
+  @@index([email])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// 2. Projects Model (Script Editors & Audios)
+model Project {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  name               String
+  scriptText         String            @db.Text
+  audioUrl           String?
+  charCount          Int               @default(0)
+  status             String            @default("Draft") // Draft, Completed
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generations        VoiceGeneration[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("projects")
+}
+
+// 3. Voices Model (AI Voice Profiles Catalog)
+model Voice {
+  id                 String            @id @default(uuid()) @db.Uuid
+  name               String            @unique
+  gender             String            // Male, Female, Other
+  age                String            // Child, Youth, Adult, Senior
+  accent             String            // US, UK, Urdu, Arabic, etc.
+  previewUrl         String?
+  category           String            @default("Standard") // Standard, Clone, Premium
+  description        String?
+  featured           Boolean           @default(false)
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  generations        VoiceGeneration[]
+
+  @@index([featured])
+  @@index([deletedAt])
+  @@map("voices")
+}
+
+// 4. VoiceGenerations Model (Generated Audio Clips logs)
+model VoiceGeneration {
+  id                 String            @id @default(uuid()) @db.Uuid
+  projectId          String?           @db.Uuid
+  userId             String            @db.Uuid
+  voiceId            String            @db.Uuid
+  text               String            @db.Text
+  duration           Float?
+  audioUrl           String?
+  format             String            @default("MP3") // MP3, WAV
+  quality            String            @default("Standard") // Standard, High
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  project            Project?          @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voice              Voice             @relation(fields: [voiceId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([voiceId])
+  @@index([deletedAt])
+  @@map("voice_generations")
+}
+
+// 5. Subscriptions Model (Quotas Limits & Active cycles)
+model Subscription {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  plan               String
+  status             String            // Active, Canceled, Past Due
+  creditLimit        Int
+  creditUsed         Int               @default(0)
+  startDate          DateTime          @default(now())
+  endDate            DateTime
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("subscriptions")
+}
+
+// 6. Payments Model (Transactional Billing Invoices)
+model Payment {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  amount             Float
+  currency           String            @default("USD")
+  status             String            // Paid, Refunded, Failed
+  provider           String            // Stripe, PayPal
+  transactionId      String            @unique
+  invoiceUrl         String?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("payments")
+}
+
+// 7. APIKeys Model (Developer key scopes and hashes)
+model APIKey {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  keyHash            String            @unique
+  name               String            @default("Default Key")
+  maskedKey          String
+  active             Boolean           @default(true)
+  expiresAt          DateTime?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@index([deletedAt])
+  @@map("api_keys")
+}
+
+// 8. UsageAnalytics Model (API request traffic analytics)
+model UsageAnalytics {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  requestPath        String
+  method             String
+  statusCode         Int
+  responseTimeMs     Int
+  charsUsed          Int               @default(0)
+  createdAt          DateTime          @default(now())
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("usage_analytics")
+}
+
+// 9. Notifications Model (In-app Alerts & system feeds)
+model Notification {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  title              String
+  message            String
+  read               Boolean           @default(false)
+  type               String            @default("info") // info, warning, success
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([deletedAt])
+  @@map("notifications")
+}
+
+// 10. ActivityLogs Model (Security log audit events)
+model ActivityLog {
+  id                 String            @id @default(uuid()) @db.Uuid
+  userId             String            @db.Uuid
+  action             String            // LOGIN, SIGNUP, GENERATE_VOICE, UPDATE_PROFILE, etc.
+  ipAddress          String?
+  userAgent          String?
+  createdAt          DateTime          @default(now())
+
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
