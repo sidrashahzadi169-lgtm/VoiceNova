@@ -51,7 +51,7 @@ export default function Projects() {
           if (sessionData.authenticated && sessionData.token) {
             setSessionToken(sessionData.token);
             
-            const projRes = await fetch("http://localhost:5000/api/projects", {
+            const projRes = await fetch("https://voice-nova-sooty.vercel.app/api/projects", {
               headers: {
                 "Authorization": `Bearer ${sessionData.token}`,
               },
@@ -72,14 +72,14 @@ export default function Projects() {
                   isStarred: false,
                   folder: "All Projects",
                   tags: ["#AI"],
-                  audioUrl: p.audioUrl ? `http://localhost:5000${p.audioUrl}` : null,
+                  audioUrl: p.audioUrl ? `https://voice-nova-sooty.vercel.app${p.audioUrl}` : null,
                   scriptText: p.scriptText,
                 }));
                 setProjects(mapped);
               }
             }
 
-            const subRes = await fetch("http://localhost:5000/api/subscriptions/status", {
+            const subRes = await fetch("https://voice-nova-sooty.vercel.app/api/subscriptions/status", {
               headers: { "Authorization": `Bearer ${sessionData.token}` },
             });
             if (subRes.ok) {
@@ -125,7 +125,7 @@ export default function Projects() {
   const handleDeleteProject = async (id: string | number) => {
     if (typeof id === "string") {
       try {
-        const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+        const res = await fetch(`https://voice-nova-sooty.vercel.app/api/projects/${id}`, {
           method: "DELETE",
           headers: {
             "Authorization": `Bearer ${sessionToken}`,

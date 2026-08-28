@@ -92,7 +92,7 @@ export default function Studio() {
       if (activeToken) {
         headers["Authorization"] = `Bearer ${activeToken}`;
       }
-      const res = await fetch("http://localhost:5000/api/elevenlabs/voices", {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/voices", {
         headers,
         signal: AbortSignal.timeout(12_000),
       });
@@ -183,7 +183,7 @@ export default function Studio() {
           if (token) {
             headers["Authorization"] = `Bearer ${token}`;
           }
-          const logRes = await fetch(`http://localhost:5000/api/elevenlabs/log/${lastGenId}`, { headers });
+          const logRes = await fetch(`https://voice-nova-sooty.vercel.app/api/elevenlabs/log/${lastGenId}`, { headers });
           if (logRes.ok) {
             const logData = await logRes.json();
             if (logData.success && logData.data) {
@@ -191,7 +191,7 @@ export default function Studio() {
               setScriptText(logObj.text);
               setActor(logObj.voiceId);
               setActorName(logObj.voiceName);
-              setAudioUrl(`http://localhost:5000${logObj.audioUrl}`);
+              setAudioUrl(`https://voice-nova-sooty.vercel.app${logObj.audioUrl}`);
               setGenerationId(logObj.downloadId);
               setIsSynthesized(true);
               setGenerationMeta({
@@ -475,7 +475,7 @@ export default function Studio() {
       if (sessionToken) {
         headers["Authorization"] = `Bearer ${sessionToken}`;
       }
-      const res = await fetch("http://localhost:5000/api/elevenlabs/synthesize", {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/synthesize", {
         method: "POST",
         headers,
         body: JSON.stringify({
@@ -505,7 +505,7 @@ export default function Studio() {
       setIsSynthesized(true);
       setGenerationId(data.data.downloadId);
       localStorage.setItem("voicenova_last_generation_id", data.data.downloadId);
-      setAudioUrl(`http://localhost:5000${data.data.audioUrl}`);
+      setAudioUrl(`https://voice-nova-sooty.vercel.app${data.data.audioUrl}`);
       setGenerationMeta({
         voiceName: data.data.voiceName,
         charCount: data.data.charCount,
@@ -537,7 +537,7 @@ export default function Studio() {
       return;
     }
     showToast("✓ Download started!");
-    window.location.href = `http://localhost:5000/api/elevenlabs/audio/${generationId}?download=1`;
+    window.location.href = `https://voice-nova-sooty.vercel.app/api/elevenlabs/audio/${generationId}?download=1`;
   };
 
   // ─── Copy Share Link ──────────────────────────────────────────────────────
@@ -546,7 +546,7 @@ export default function Studio() {
       showToast("No audio generated yet.", "error");
       return;
     }
-    const link = `http://localhost:5000/api/elevenlabs/audio/${generationId}`;
+    const link = `https://voice-nova-sooty.vercel.app/api/elevenlabs/audio/${generationId}`;
     try {
       await navigator.clipboard.writeText(link);
       showToast("✓ Direct download link copied to clipboard!");

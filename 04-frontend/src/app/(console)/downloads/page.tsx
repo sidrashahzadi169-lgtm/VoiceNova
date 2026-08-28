@@ -52,7 +52,7 @@ export default function DownloadsPage() {
       const headers: Record<string, string> = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch("http://localhost:5000/api/elevenlabs/history?limit=100", { headers });
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/history?limit=100", { headers });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.success) {
@@ -102,7 +102,7 @@ export default function DownloadsPage() {
       audioRef.current.pause();
     }
 
-    const audioUrl = `http://localhost:5000/api/elevenlabs/audio/${entry.downloadId}`;
+    const audioUrl = `https://voice-nova-sooty.vercel.app/api/elevenlabs/audio/${entry.downloadId}`;
     const audio = new Audio(audioUrl);
     audioRef.current = audio;
 
@@ -126,7 +126,7 @@ export default function DownloadsPage() {
       return;
     }
     showToast("✓ Download started!");
-    window.location.href = `http://localhost:5000/api/elevenlabs/audio/${entry.downloadId}?download=1`;
+    window.location.href = `https://voice-nova-sooty.vercel.app/api/elevenlabs/audio/${entry.downloadId}?download=1`;
   };
   const formatDuration = (secs: number) => {
     const m = Math.floor(secs / 60);

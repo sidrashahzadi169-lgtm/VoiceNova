@@ -33,7 +33,7 @@ export default function Analytics() {
             const startDate = new Date();
             startDate.setDate(endDate.getDate() - parseInt(dateRange, 10));
 
-            const res = await fetch(`http://localhost:5000/api/analytics/usage?start=${startDate.toISOString().split("T")[0]}&end=${endDate.toISOString().split("T")[0]}`, {
+            const res = await fetch(`https://voice-nova-sooty.vercel.app/api/analytics/usage?start=${startDate.toISOString().split("T")[0]}&end=${endDate.toISOString().split("T")[0]}`, {
               headers: { "Authorization": `Bearer ${sessionData.token}` },
             });
             

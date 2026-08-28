@@ -7,13 +7,13 @@
  * The ElevenLabs API key lives exclusively in 05-Backend/.env.
  *
  * The frontend calls: GET /api/elevenlabs/voices
- * This proxy calls:   GET http://localhost:5000/api/voice-generations/provider/voices
+ * This proxy calls:   GET https://voice-nova-sooty.vercel.app/api/voice-generations/provider/voices
  */
 
 import { NextRequest, NextResponse } from "next/server";
 
 // Backend base URL — never exposed to the client bundle
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:5000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://voice-nova-sooty.vercel.app";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {

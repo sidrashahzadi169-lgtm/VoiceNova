@@ -101,7 +101,7 @@ export default function Dashboard() {
 
   const loadRecentTracks = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/elevenlabs/history?limit=5", {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/history?limit=5", {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -117,7 +117,7 @@ export default function Dashboard() {
             date: new Date(log.createdAt).toLocaleDateString(),
             duration: `${Math.floor(log.duration / 60)}:${String(Math.floor(log.duration % 60)).padStart(2, '0')}`,
             text: log.text,
-            audioUrl: `http://localhost:5000${log.audioUrl}`,
+            audioUrl: `https://voice-nova-sooty.vercel.app${log.audioUrl}`,
           }));
           setRecentTracks(mapped);
         }
@@ -300,7 +300,7 @@ export default function Dashboard() {
         headers["Authorization"] = `Bearer ${sessionToken}`;
       }
 
-      const res = await fetch("http://localhost:5000/api/elevenlabs/synthesize", {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/synthesize", {
         method: "POST",
         headers,
         body: JSON.stringify({
@@ -316,7 +316,7 @@ export default function Dashboard() {
 
       if (res.ok && data.success) {
         setIsPlaying(true);
-        const fullUrl = `http://localhost:5000${data.data.audioUrl}`;
+        const fullUrl = `https://voice-nova-sooty.vercel.app${data.data.audioUrl}`;
         setAudioUrl(fullUrl);
 
         if (!audioRef.current) {
