@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     const emailLower = email.toLowerCase().trim();
     const user = users.find((u) => u.email.toLowerCase() === emailLower);
 

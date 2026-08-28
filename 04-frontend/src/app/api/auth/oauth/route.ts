@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     // Simulate generic OAuth mock accounts
     const email = `oauth.${provider}@voicenova.ai`;
     const name = provider === "google" ? "Google Sandbox User" : "GitHub Sandbox User";
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         verified: true, // OAuth emails are pre-verified
       };
       users.push(user);
-      writeUsers(users);
+      await writeUsers(users);
     }
 
     // Sign JWT session token

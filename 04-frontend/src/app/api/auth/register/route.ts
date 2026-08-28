@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     const emailLower = email.toLowerCase().trim();
 
     // Check if user already exists
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     };
 
     users.push(newUser);
-    writeUsers(users);
+    await writeUsers(users);
 
     return NextResponse.json(
       {

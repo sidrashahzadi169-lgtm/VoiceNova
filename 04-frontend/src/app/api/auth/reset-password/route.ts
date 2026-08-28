@@ -19,9 +19,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     const user = users.find(
-      (u) => u.resetToken === token && u.resetExpiry && u.resetExpiry > Date.now()
+      (u) => u.resetToken === token && u.resetExpiry && u.resetExpiry.getTime() > Date.now()
     );
 
     if (!user) {
@@ -35,10 +35,10 @@ export async function POST(req: Request) {
     const { salt, hash } = hashPassword(password);
     user.salt = salt;
     user.hash = hash;
-    delete user.resetToken;
-    delete user.resetExpiry;
+    user.resetToken = null;
+    user.resetExpiry = null;
 
-    writeUsers(users);
+    await writeUsers(users);
 
     return NextResponse.json({
       message: "Password reset successful! You can now log in.",
@@ -50,3 +50,4 @@ export async function POST(req: Request) {
     );
   }
 }
+

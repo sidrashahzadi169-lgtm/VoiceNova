@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Verification token is required" }, { status: 400 });
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     const user = users.find((u) => u.verificationToken === token);
 
     if (!user) {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     user.verified = true;
     delete user.verificationToken;
 
-    writeUsers(users);
+    await writeUsers(users);
 
     return NextResponse.json({
       message: "Email verification successful! Your account is now fully active.",

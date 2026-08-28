@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const users = readUsers();
+    const users = await readUsers();
     const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase().trim());
 
     if (!user) {
@@ -23,9 +23,9 @@ export async function POST(req: Request) {
     // Generate reset token and set 1-hour expiry
     const resetToken = crypto.randomBytes(32).toString("hex");
     user.resetToken = resetToken;
-    user.resetExpiry = Date.now() + 3600000; // 1 hour
+    user.resetExpiry = new Date(Date.now() + 3600000); // 1 hour
 
-    writeUsers(users);
+    await writeUsers(users);
 
     return NextResponse.json({
       message: "Password reset link generated successfully.",
@@ -38,3 +38,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
