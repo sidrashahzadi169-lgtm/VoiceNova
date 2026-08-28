@@ -107,11 +107,15 @@ async function bootstrap() {
   // Start background queue workers
   EmailWorker.start();
 
-  app.listen(env.PORT, () => {
-    logger.info(`🚀  Server initialized successfully on Port ${env.PORT}`);
-    logger.info(`📚  Swagger API Documentation at http://localhost:${env.PORT}/api-docs`);
-    logger.info(`🤖  Active AI Provider: ${env.AI_PROVIDER}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(env.PORT, () => {
+      logger.info(`🚀  Server initialized successfully on Port ${env.PORT}`);
+      logger.info(`📚  Swagger API Documentation at http://localhost:${env.PORT}/api-docs`);
+      logger.info(`🤖  Active AI Provider: ${env.AI_PROVIDER}`);
+    });
+  }
 }
 
 bootstrap();
+
+export default app;
