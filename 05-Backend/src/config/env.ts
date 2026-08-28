@@ -35,7 +35,7 @@ const envSchema = z.object({
 
   // ── AI Provider ───────────────────────────────────────────────────────────
   AI_PROVIDER: z
-    .string()
+    .enum(["elevenlabs", "openai", "azure"])
     .default("elevenlabs"),
 
   // ── ElevenLabs ────────────────────────────────────────────────────────────
