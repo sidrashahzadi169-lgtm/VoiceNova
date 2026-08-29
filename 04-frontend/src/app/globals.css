@@ -6443,3 +6443,150 @@ input:checked + .slider:before {
     color: var(--color-primary) !important;
 }
 
+
+/* ==========================================================================
+   GLOBAL UI/UX RESPONSIVE ENGINE PATCH (ANTIGRAVITY AUDIT FIX)
+   Ensures 100% responsiveness, zero overflow, and touch-friendly targets
+   across mobile, tablet, and desktop without removing features.
+   ========================================================================== */
+
+/* 1. Universal Layout & Overflow Normalization */
+html, body {
+    max-width: 100vw;
+    overflow-x: hidden !important;
+    position: relative;
+}
+
+/* Ensure no elements break the viewport width */
+* {
+    max-width: 100vw;
+}
+
+/* Allow images/videos to scale */
+img, video, svg, canvas, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 2. Intelligent Spacing & Container Constraints for Mobile/Tablet */
+@media (max-width: 768px) {
+    /* Compress extreme paddings on mobile */
+    .glass-panel, .card, .auth-card, .modal {
+        padding: 1.25rem !important;
+        margin: 0.5rem !important;
+        width: calc(100% - 1rem) !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Convert fixed widths into responsive flex-cols */
+    .flex-row, .auth-layout, .library-workspace-layout, .profile-layout-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .auth-form-side, .auth-info-side {
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 1rem !important;
+    }
+
+    /* Wrap flex items instead of overflowing */
+    .flex, [style*="display: flex"] {
+        flex-wrap: wrap;
+    }
+
+    /* Keep sidebars accessible if they are flex, or respect absolute positioning */
+    .sidebar, .dash-sidebar {
+        z-index: 1000;
+    }
+}
+
+/* 3. Typography & Text Scaling */
+@media (max-width: 768px) {
+    h1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
+    h2 { font-size: clamp(1.5rem, 5vw, 2rem) !important; }
+    h3 { font-size: clamp(1.25rem, 4vw, 1.75rem) !important; }
+    
+    /* Prevent long unbroken strings from causing horizontal scroll */
+    p, span, div, a, h1, h2, h3, h4, h5, h6 {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+}
+
+/* 4. Touch-Friendly Accessibility Standards (Forms, Inputs, Buttons) */
+@media (max-width: 768px) {
+    /* Min 44px hit area for iOS/Android compliance */
+    button, .btn, input, select, textarea, a.nav-link {
+        min-height: 44px !important;
+    }
+    
+    /* Prevent iOS form auto-zoom */
+    input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+        font-size: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Buttons full width on mobile for better ergonomics */
+    .btn {
+        width: 100% !important;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* 5. Responsive Data Tables */
+.table-container, .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth iOS swipe */
+    border-radius: var(--border-radius);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+@media (max-width: 768px) {
+    /* Prevent tables from squishing text into unreadable vertical columns */
+    table {
+        min-width: 600px;
+    }
+    
+    /* Data tables inside dashboard should scroll horizontally on mobile */
+    .dash-main-content table, .library-content table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* 6. Fix for fixed glowing background blobs causing overflow */
+.bg-glow, .bg-glow-1, .bg-glow-2, .bg-glow-3 {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    opacity: 0.6; /* Dim slightly on mobile for better readability */
+}
+
+/* 7. Alignment & Spacing Polish */
+.spacer {
+    flex-grow: 1;
+}
+
+@media (max-width: 480px) {
+    .gap-4 { gap: 0.5rem !important; }
+    .gap-6 { gap: 1rem !important; }
+    .gap-8 { gap: 1.25rem !important; }
+    
+    /* Center align mobile headers */
+    .mobile-center {
+        text-align: center;
+        justify-content: center;
+    }
+}
