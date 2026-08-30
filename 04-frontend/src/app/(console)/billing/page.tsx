@@ -40,8 +40,26 @@ export default function Billing() {
     showToast(`Downloading receipt for ${invId}...`);
   };
 
-  const handleUpgradeClick = (planName: string) => {
-    showToast(`Initiating checkout process for ${planName}...`);
+    const handleUpgradeClick = async (planName: string) => {
+    
+    showToast(Processing upgrade to ...);
+    try {
+      const res = await fetch("/api/payment/mock-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planName }),
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        window.location.href = data.url;
+      } else {
+        showToast(data.message || "Checkout failed", "error");
+        
+      }
+    } catch (err) {
+      showToast("Network error. Try again.", "error");
+      
+    }
   };
 
   return (
@@ -295,4 +313,6 @@ export default function Billing() {
     </div>
   );
 }
+
+
 
