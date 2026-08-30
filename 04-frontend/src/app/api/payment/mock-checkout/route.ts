@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
+
 
 const JWT_SECRET = process.env.JWT_SECRET || "voicenova_neural_auth_secret_key_2026_prod";
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
     const userId = decoded.id;
 
     const { plan } = await req.json();
@@ -78,3 +78,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
+

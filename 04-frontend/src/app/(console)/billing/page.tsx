@@ -42,7 +42,7 @@ export default function Billing() {
 
     const handleUpgradeClick = async (planName: string) => {
     
-    showToast(Processing upgrade to ...);
+    showToast(`Processing upgrade to ${planName}...`);
     try {
       const res = await fetch("/api/payment/mock-checkout", {
         method: "POST",
@@ -313,6 +313,7 @@ export default function Billing() {
     </div>
   );
 }
+
 
 
 
