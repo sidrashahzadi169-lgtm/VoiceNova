@@ -58,7 +58,7 @@ async function verifyMiddlewareJwt(token: string): Promise<any> {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("vn_session")?.value;
   const hasValidSession = token ? !!(await verifyMiddlewareJwt(token)) : false;
@@ -113,3 +113,4 @@ export const config = {
     "/signup",
   ],
 };
+

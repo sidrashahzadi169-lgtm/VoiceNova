@@ -211,13 +211,11 @@ export default function Billing() {
             <div className="pay-details" style={{ display: "flex", flexDirection: "column", fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
               <span>sidra.nova@paypal.com</span>
               <span>Linked Sync</span>
-              </div>
-            </div>
-            </div>
+              </div>            </div>
 
             <div className="payment-card-option glass-panel" style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px", border: "1px solid #10b981" }}>
               <div className="pay-option-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontWeight: 600, fontSize: "0.85rem", color: "#10b981" }}>Easypaisa</span>
+                <span style={{ fontWeight: 600, fontSize: "0.85rem", color: "#10b981" }}>Easypaisa Mobile</span>
                 <span className="badge badge-success-active" style={{ fontSize: "0.6rem" }}>Verified</span>
               </div>
               <div className="pay-details" style={{ display: "flex", flexDirection: "column", fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
@@ -225,8 +223,8 @@ export default function Billing() {
                 <span>+92 370-9718035</span>
               </div>
             </div>
+          </div>
         </div>
-      </div>
 
       {/* Invoices table list */}
       <section className="projects-section">
