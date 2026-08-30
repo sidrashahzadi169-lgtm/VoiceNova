@@ -21,8 +21,17 @@ const API_KEY = () => env.ELEVENLABS_API_KEY;
 // Resolve the audio storage directory (same logic as GenerationService)
 function getStorageDir(): string {
   const p = env.AUDIO_STORAGE_PATH;
-  const resolved = path.isAbsolute(p) ? p : path.resolve(process.cwd(), p);
-  if (!fs.existsSync(resolved)) fs.mkdirSync(resolved, { recursive: true });
+  let resolved = path.isAbsolute(p) ? p : path.resolve(process.cwd(), p);
+  if (process.env.VERCEL) {
+    resolved = require('path').join('/tmp', '09-uploads');
+  }
+  if (!fs.existsSync(resolved)) {
+    try {
+      fs.mkdirSync(resolved, { recursive: true });
+    } catch (e) {
+      console.warn("Could not create storage dir:", e);
+    }
+  }
   return resolved;
 }
 
