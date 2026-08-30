@@ -293,7 +293,7 @@ export class GenerationService {
    */
   static ensureStorageDirectory(dirPath: string): void {
     if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
+      if (process.env.VERCEL) { dirPath = require("path").join("/tmp", "09-uploads"); }; try { fs.mkdirSync(dirPath, { recursive: true }); } catch (e) {}
       logger.info(`[GenerationService] Created audio storage directory: ${dirPath}`);
     }
   }
@@ -313,3 +313,4 @@ export class GenerationService {
     return FORMAT_TO_MIME_TYPE[format];
   }
 }
+

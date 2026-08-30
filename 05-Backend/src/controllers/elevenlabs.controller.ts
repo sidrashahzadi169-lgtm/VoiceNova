@@ -701,3 +701,4 @@ export async function getLogByDownloadId(
     next(error);
   }
 }
+
