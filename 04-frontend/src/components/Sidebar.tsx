@@ -60,8 +60,19 @@ export default function Sidebar({ isOpen, onClose, isAdmin = false, onLogout }: 
     { label: "Settings", href: "#", icon: Settings },
   ];
 
-  const navItems = isAdmin ? adminNavItems : userNavItems;
-  const accountItems = isAdmin ? adminAccountItems : userAccountItems;
+  // Always include Admin Panel link in account items if isAdmin is true or on admin page
+  const extendedUserAccountItems = [
+    ...userAccountItems,
+    ...(isAdmin ? [{ label: "Admin Panel", href: "/admin", icon: Cpu }] : [])
+  ];
+
+  const extendedAdminAccountItems = [
+    ...adminAccountItems,
+    { label: "Back to Studio", href: "/dashboard", icon: LayoutDashboard }
+  ];
+
+  const navItems = pathname.startsWith('/admin') ? adminNavItems : userNavItems;
+  const accountItems = pathname.startsWith('/admin') ? extendedAdminAccountItems : extendedUserAccountItems;
 
   const handleLinkClick = () => {
     // Automatically close sidebar on link click in mobile view

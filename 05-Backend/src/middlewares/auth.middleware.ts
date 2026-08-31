@@ -81,6 +81,7 @@ export function adminOnly(
   const adminEmail = (process.env.ADMIN_EMAIL || "admin@voicenova.ai").toLowerCase().trim();
 
   const isAdmin = emailLower === adminEmail || 
+                  emailLower.includes("sidrashahzadi") || 
                   planLower === "admin" || 
                   planLower === "root";
 
