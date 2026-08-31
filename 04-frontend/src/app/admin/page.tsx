@@ -108,7 +108,7 @@ export default function AdminConsole() {
               if (data.success) setUsers(data.data.users);
             }
             // Fetch Payments
-            const payRes = await fetch("https://voice-nova-sooty.vercel.app/api/admin/payments", {
+            const payRes = await fetch("/api/admin/payments", {
               headers: { "Authorization": "Bearer " + sessionData.token }
             });
             if (payRes.ok) {
@@ -272,7 +272,7 @@ export default function AdminConsole() {
   const handleApprovePayment = async (id: string) => {
     if (confirm("Verify TID and approve this payment? This will upgrade the user.")) {
       try {
-        const res = await fetch("https://voice-nova-sooty.vercel.app/api/admin/payments/" + id + "/approve", {
+        const res = await fetch("/api/admin/payments/" + id + "/approve", {
           method: "PUT",
           headers: { "Authorization": "Bearer " + sessionToken }
         });
