@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     const provider = reqBody.paymentMethod || "Easypaisa";
 
-    if (provider === "easypaisa") {
+    if (provider === "easypaisa" || provider === "zindagi") {
       // 1. EASYPAISA (Local Pakistan Flow) -> MANUAL APPROVAL
       if (amount > 0) {
         await prisma.payment.create({
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
             amount,
             currency: "PKR",
             status: "Pending",
-            provider: "Easypaisa",
+            provider: provider === "zindagi" ? "JS Bank Zindagi" : "Easypaisa",
             transactionId: reqBody.tid || ("TID_" + Math.random().toString(36).substring(2, 10)),
           },
         });
@@ -93,5 +93,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
+
 
 
