@@ -10,6 +10,7 @@ import stripeRoutes from "./stripe.routes";
 import analyticsRoutes from "./analytics.routes";
 import paymentRoutes from "./payment.routes";
 import adminRoutes from "./admin.routes";
+import aiRoutes from "./ai.routes";
 
 const router = Router();
 
@@ -24,7 +25,9 @@ router.use("/subscriptions", subscriptionRoutes);
 router.use("/stripe", stripeRoutes);
 router.use("/analytics", analyticsRoutes);
 router.use("/admin", adminRoutes);
+router.use("/ai", aiRoutes);
 
 export default router;
+
 
 
