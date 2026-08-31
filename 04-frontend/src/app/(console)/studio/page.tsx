@@ -90,7 +90,7 @@ export default function Studio() {
       const activeToken = tokenArg !== undefined ? tokenArg : sessionToken;
       const headers: Record<string, string> = {};
       if (activeToken) {
-        headers["Authorization"] = `Bearer ${activeToken}`;
+        headers["Authorization"] = "Bearer " + activeToken;
       }
       const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/voices", {
         headers,
@@ -217,6 +217,36 @@ export default function Studio() {
   // Synthesizer running states
   const [isSynthesized, setIsSynthesized] = useState(false);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
+  
+  const handleConvertRoman = async () => {
+    if (!scriptText || scriptText.trim().length === 0) {
+      showToast("Please enter some Roman Urdu text first.", "error");
+      return;
+    }
+    setIsConverting(true);
+    try {
+      const activeToken = sessionToken;
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/ai/convert-roman", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + activeToken },
+        body: JSON.stringify({ text: scriptText })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setScriptText(data.text);
+        showToast("Converted to Urdu successfully!");
+      } else {
+        showToast(data.message || "Failed to convert.", "error");
+      }
+    } catch (err) {
+      showToast("Network error during conversion.", "error");
+    } finally {
+      setIsConverting(false);
+    }
+  };
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<string | null>(null);
@@ -1081,3 +1111,5 @@ export default function Studio() {
     </div>
   );
 }
+
+

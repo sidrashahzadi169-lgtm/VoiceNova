@@ -59,3 +59,57 @@ export async function generateScript(
 }
 
 
+
+export async function convertRomanToUrdu(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { text } = req.body;
+
+    if (!text) {
+      res.status(400).json({ success: false, message: "Text is required" });
+      return;
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      res.status(200).json({
+        success: true,
+        text: "?? ?? ??? ?? ????? ???? ??? ?? ???? ????? ???\n(Mock Urdu conversion due to missing API key)",
+        isMock: true
+      });
+      return;
+    }
+
+    const prompt = "Convert the following Roman Urdu text into authentic, natural native Urdu script (Perso-Arabic script). Do not translate it to English, just transliterate/convert it accurately to Urdu script. Only output the Urdu text, no explanation.\n\nText: " + text;
+
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.text();
+      res.status(502).json({ success: false, message: "Failed to convert text." });
+      return;
+    }
+
+    const data = await response.json() as any;
+    const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    res.status(200).json({
+      success: true,
+      text: generatedText.trim(),
+      isMock: false
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+

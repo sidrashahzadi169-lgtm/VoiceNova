@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { protect } from "../middlewares/auth.middleware";
-import { generateScript } from "../controllers/ai.controller";
+import { generateScript, convertRomanToUrdu } from "../controllers/ai.controller";
 
 const router = Router();
 
@@ -32,4 +32,8 @@ const router = Router();
  */
 router.post("/generate-script", protect, generateScript);
 
+router.post("/convert-roman", protect, convertRomanToUrdu);
+
 export default router;
+
+
