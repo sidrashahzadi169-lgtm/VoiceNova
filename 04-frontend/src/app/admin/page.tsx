@@ -531,24 +531,24 @@ export default function AdminConsole() {
                     </tr>
                   </thead>
                   <tbody>
-                    {payments.map((p) => (
-                      <tr key={p.invoice}>
-                        <td><strong>{p.invoice}</strong></td>
-                        <td>{p.client}</td>
-                        <td>{p.date}</td>
-                        <td>{p.amt}</td>
-                        <td>{p.gateway}</td>
-                        <td><span className="status-pill status-pill-success">{p.status}</span></td>
-                        <td>
-                          {p.status === "Refund Pending" ? (
-                            <button className="btn btn-outline btn-xs" onClick={() => handleApproveRefund(p.invoice)}>Approve Refund</button>
-                          ) : (
-                            <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>None</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                      {payments.map((p, idx) => (
+                        <tr key={idx}>
+                          <td><strong>{p.transactionId}</strong></td>
+                          <td>{p.user?.name || "Unknown"}</td>
+                          <td>{new Date(p.createdAt || Date.now()).toLocaleDateString()}</td>
+                          <td>${p.amount} {p.currency}</td>
+                          <td>{p.provider}</td>
+                          <td><span className={`status-pill ${p.status === "Paid" ? "status-pill-success" : "status-pill-warning"}`}>{p.status}</span></td>
+                          <td>
+                            {p.status === "Pending" ? (
+                              <button className="btn btn-primary btn-xs" onClick={() => handleApprovePayment(p.id!)}>Approve</button>
+                            ) : (
+                              <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Processed</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                 </table>
               </div>
             </div>
@@ -682,6 +682,10 @@ export default function AdminConsole() {
     </div>
   );
 }
+
+
+
+
 
 
 
