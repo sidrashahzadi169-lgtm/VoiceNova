@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Activity,
   Check,
@@ -30,8 +30,37 @@ export default function Billing() {
   ]);
 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [billingData, setBillingData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchBilling = async () => {
+      try {
+        const res = await fetch("/api/payment/billing-info", {
+          headers: { "Authorization": "Bearer " + (localStorage.getItem("vn_token") || "") }
+        });
+        if (res.ok) {
+          const json = await res.json();
+          setBillingData(json.data);
+          if (json.data?.paymentHistory) {
+            setInvoices(json.data.paymentHistory.map((p: any) => ({
+              id: p.transactionId,
+              date: new Date(p.createdAt).toLocaleDateString(),
+              amount: p.currency + " " + p.amount,
+              status: p.status
+            })));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load billing:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBilling();
+  }, []);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("easypaisa");
   const [tid, setTid] = useState("");

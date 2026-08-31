@@ -56,6 +56,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
         onLogout={handleLogout}
+        isAdmin={user?.plan === 'admin' || user?.plan === 'root' || user?.email === 'admin@voicenova.ai' || user?.email === 'info@voicenova.ai'}
       />
 
       {/* Main Console Viewport Wrapper */}
