@@ -68,14 +68,48 @@ export default function AdminConsole() {
   // Mobile sidebar
   const [sidebarActive, setSidebarActive] = useState(false);
 
-  // Mocks Data States
-  const [users, setUsers] = useState<AdminUser[]>([
-    { id: 1, name: "Sidra Rehman", email: "sidra.rehman@voicenova.ai", plan: "Pro Plan", registered: "July 1, 2026", status: "Active" },
-    { id: 2, name: "Alex Morgan", email: "alex.morgan@example.com", plan: "Free Plan", registered: "June 30, 2026", status: "Active" },
-    { id: 3, name: "Sarah Jenkins", email: "sarah.j@agency.co", plan: "Enterprise", registered: "June 28, 2026", status: "Active" },
-    { id: 4, name: "Omar Farooq", email: "omar.f@domain.pk", plan: "Pro Plan", registered: "June 25, 2026", status: "Suspended" },
-    { id: 5, name: "Ayesha Khan", email: "ayesha@startup.io", plan: "Starter Plan", registered: "June 20, 2026", status: "Active" },
-  ]);
+  // Real Data States
+  const [users, setUsers] = useState<any[]>([]);
+  const [overview, setOverview] = useState({ totalUsers: 0, totalRevenue: 0, totalVoiceGenerations: 0 });
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    async function loadAdminData() {
+      try {
+        const sessionRes = await fetch("/api/auth/session");
+        if (sessionRes.ok) {
+          const sessionData = await sessionRes.json();
+          if (sessionData.authenticated && sessionData.token) {
+            setSessionToken(sessionData.token);
+            
+            // Fetch overview
+            const overviewRes = await fetch("https://voice-nova-sooty.vercel.app/api/admin/overview", {
+              headers: { "Authorization": "Bearer " + sessionData.token }
+            });
+            if (overviewRes.ok) {
+              const data = await overviewRes.json();
+              if (data.success) setOverview(data.data.kpis);
+            }
+            
+            // Fetch users
+            const usersRes = await fetch("https://voice-nova-sooty.vercel.app/api/admin/users", {
+              headers: { "Authorization": "Bearer " + sessionData.token }
+            });
+            if (usersRes.ok) {
+              const data = await usersRes.json();
+              if (data.success) setUsers(data.data.users);
+            }
+          } else {
+             // Not authenticated, redirect
+             router.push("/login");
+          }
+        }
+      } catch (err) {}
+      setIsLoading(false);
+    }
+    loadAdminData();
+  }, []);
 
   const [voices, setVoices] = useState<AdminVoice[]>([
     { id: 1, name: "Nova", gender: "Female", lang: "English", accent: "United States (US)", style: "Narration", featured: true },
@@ -110,33 +144,72 @@ export default function AdminConsole() {
   };
 
   // User Actions
-  const handleToggleSuspend = (id: number) => {
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id === id) {
-          const nextStatus = u.status === "Active" ? "Suspended" : "Active";
-          showToast(`User ${u.name} set to ${nextStatus}`);
-          return { ...u, status: nextStatus };
-        }
-        return u;
-      })
-    );
-  };
-
-  const handleChangePlan = (id: number) => {
-    const nextPlan = prompt("Enter new plan type (Free Plan, Starter Plan, Pro Plan, Enterprise):");
-    if (nextPlan && nextPlan.trim() !== "") {
-      setUsers((prev) =>
-        prev.map((u) => (u.id === id ? { ...u, plan: nextPlan.trim() } : u))
-      );
-      showToast("User plan updated successfully.");
+  const handleToggleSuspend = async (id: number | string) => {
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+    const newStatus = user.status === "Active" ? "Suspended" : "Active";
+    
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/admin/users/" + id + "/status", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionToken
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (res.ok) {
+        setUsers((prev) => prev.map((u) => u.id === id ? { ...u, status: newStatus as any } : u));
+        showToast("User status updated.");
+      } else {
+        showToast("Failed to update status", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
     }
   };
 
-  const handleDeleteUser = (id: number) => {
+  const handleChangePlan = async (id: number | string) => {
+    const nextPlan = prompt("Enter new plan type (Free Plan, Starter Plan, Pro Plan, Enterprise):");
+    if (nextPlan && nextPlan.trim() !== "") {
+      try {
+        const res = await fetch("https://voice-nova-sooty.vercel.app/api/admin/users/" + id + "/plan", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sessionToken
+          },
+          body: JSON.stringify({ plan: nextPlan.trim() })
+        });
+        if (res.ok) {
+          setUsers((prev) => prev.map((u) => u.id === id ? { ...u, plan: nextPlan.trim() } : u));
+          showToast("User plan updated successfully.");
+        } else {
+          showToast("Failed to update plan", "error");
+        }
+      } catch (err) {
+        showToast("Network error", "error");
+      }
+    }
+  };
+
+  const handleDeleteUser = async (id: number | string) => {
     if (confirm("Permanently delete this user account?")) {
-      setUsers((prev) => prev.filter((u) => u.id !== id));
-      showToast("User account deleted.");
+      try {
+        const res = await fetch("https://voice-nova-sooty.vercel.app/api/admin/users/" + id, {
+          method: "DELETE",
+          headers: {
+            "Authorization": "Bearer " + sessionToken }
+        });
+        if (res.ok) {
+          setUsers((prev) => prev.filter((u) => u.id !== id));
+          showToast("User account deleted.");
+        } else {
+          showToast("Failed to delete user", "error");
+        }
+      } catch (err) {
+        showToast("Network error", "error");
+      }
     }
   };
 
@@ -288,11 +361,11 @@ export default function AdminConsole() {
               <div className="dashboard-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
                 <div className="stat-card glass-panel" style={{ padding: "20px" }}>
                   <span className="stat-label">Total Registered Users</span>
-                  <span className="stat-num" style={{ fontSize: "1.6rem", fontWeight: 700 }}>1,245 Users</span>
+                  <span className="stat-num" style={{ fontSize: "1.6rem", fontWeight: 700 }}>{overview.totalUsers || 0} Users</span>
                 </div>
                 <div className="stat-card glass-panel" style={{ padding: "20px" }}>
                   <span className="stat-label">Total SaaS Revenue</span>
-                  <span className="stat-num" style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--color-secondary)" }}>$14,520 USD</span>
+                  <span className="stat-num" style={{ fontSize: "1.6rem", fontWeight: 700, color: "var(--color-secondary)" }}>${overview.totalRevenue || 0} USD</span>
                 </div>
                 <div className="stat-card glass-panel" style={{ padding: "20px" }}>
                   <span className="stat-label">Active Support Tickets</span>
@@ -584,3 +657,10 @@ export default function AdminConsole() {
     </div>
   );
 }
+
+
+
+
+
+
+
