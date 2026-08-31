@@ -318,3 +318,144 @@ export async function downloadInvoice(req: AuthenticatedRequest, res: Response, 
     next(error);
   }
 }
+
+
+import { PaymentFactory } from "../services/payment/PaymentFactory";
+
+export async function createCheckoutSession(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const userId = req.user?.id!;
+    const { planName, gateway } = req.body; // gateway = "easypaisa" | "international"
+
+    if (!planName || !gateway) {
+      res.status(400).json({ success: false, message: "planName and gateway are required" });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+      return;
+    }
+
+    // Determine amount
+    const amountMap: Record<string, number> = {
+      "Starter Plan": 9.0,
+      "Pro Plan": 29.0,
+      "Business": 99.0,
+      "Enterprise": 99.0
+    };
+    const amount = amountMap[planName] || 9.0;
+
+    try {
+      const provider = PaymentFactory.getProvider(gateway);
+      
+      const successUrl = process.env.FRONTEND_URL 
+        ? process.env.FRONTEND_URL + "/payment-success"
+        : "http://localhost:3000/payment-success";
+        
+      const cancelUrl = process.env.FRONTEND_URL 
+        ? process.env.FRONTEND_URL + "/payment-failed"
+        : "http://localhost:3000/payment-failed";
+
+      const checkoutResponse = await provider.createCheckout({
+        userId,
+        userEmail: user.email,
+        planName,
+        amount,
+        currency: gateway === "easypaisa" ? "PKR" : "USD",
+        successUrl,
+        cancelUrl
+      });
+
+      res.status(200).json({ success: true, data: checkoutResponse });
+    } catch (providerError: any) {
+      if (providerError.message.includes("MISSING_CONFIG")) {
+        res.status(503).json({ 
+          success: false, 
+          message: providerError.message,
+          error_code: "MISSING_GATEWAY_CONFIG"
+        });
+      } else {
+        throw providerError;
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function handlePaymentWebhook(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { gateway } = req.params;
+    const provider = PaymentFactory.getProvider(gateway);
+    const signature = req.headers["x-signature"] as string || ""; // Placeholder for actual header
+
+    const result = await provider.handleWebhook(req.body, signature);
+
+    if (result.status === "ignored") {
+      res.status(200).json({ received: true });
+      return;
+    }
+
+    if (result.status === "failed") {
+      res.status(200).json({ received: true, status: "Payment failed logged" });
+      return;
+    }
+
+    // Process successful payment
+    if (result.status === "success" && result.userId && result.planName) {
+      // Prevent duplicate processing
+      const existing = await prisma.payment.findUnique({ where: { transactionId: result.transactionId! } });
+      if (existing) {
+        res.status(200).json({ received: true, status: "Already processed" });
+        return;
+      }
+
+      await prisma.payment.create({
+        data: {
+          userId: result.userId,
+          amount: result.amount || 0,
+          currency: result.currency || "USD",
+          status: "Paid",
+          provider: gateway,
+          transactionId: result.transactionId!
+        }
+      });
+
+      // Update subscription
+      const user = await prisma.user.update({
+        where: { id: result.userId },
+        data: { plan: result.planName }
+      });
+
+      await prisma.subscription.updateMany({
+        where: { userId: user.id, status: "Active" },
+        data: { status: "Canceled" }
+      });
+
+      const nextMonth = new Date();
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+      await prisma.subscription.create({
+        data: {
+          userId: user.id,
+          plan: result.planName,
+          status: "Active",
+          creditLimit: 500000,
+          creditUsed: 0,
+          startDate: new Date(),
+          endDate: nextMonth
+        }
+      });
+    }
+
+    res.status(200).json({ received: true });
+  } catch (error: any) {
+    if (error.message.includes("MISSING_CONFIG")) {
+      res.status(503).json({ success: false, message: "Webhook endpoint not configured" });
+    } else {
+      next(error);
+    }
+  }
+}

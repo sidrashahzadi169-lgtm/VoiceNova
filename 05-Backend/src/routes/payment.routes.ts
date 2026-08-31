@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { savePaymentMethod, subscribe, getBillingInfo, downloadInvoice } from "../controllers/payment.controller";
+import { savePaymentMethod, subscribe, getBillingInfo, downloadInvoice, createCheckoutSession, handlePaymentWebhook } from "../controllers/payment.controller";
 import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
@@ -110,4 +110,9 @@ router.post("/subscribe", protect, subscribe);
  */
 router.get("/invoice/:invoiceNum", protect, downloadInvoice);
 
+
+router.post("/checkout", protect, createCheckoutSession);
+router.post("/webhook/:gateway", handlePaymentWebhook);
+
 export default router;
+
