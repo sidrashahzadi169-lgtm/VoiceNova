@@ -9,7 +9,7 @@ import {
   getAdminVoices,
   addAdminVoice,
   updateAdminVoice,
-  deleteAdminVoice
+  deleteAdminVoice, getAdminPayments, approveAdminPayment
 } from "../controllers/admin.controller";
 import { getSettings, updateSettings } from "../controllers/settings.controller";
 import { getTickets, updateTicket } from "../controllers/ticket.controller";
@@ -39,4 +39,9 @@ router.post("/voices", protect, adminOnly, addAdminVoice);
 router.put("/voices/:id", protect, adminOnly, updateAdminVoice);
 router.delete("/voices/:id", protect, adminOnly, deleteAdminVoice);
 
+router.get("/payments", protect, adminOnly, getAdminPayments);
+router.put("/payments/:id/approve", protect, adminOnly, approveAdminPayment);
 export default router;
+
+
+

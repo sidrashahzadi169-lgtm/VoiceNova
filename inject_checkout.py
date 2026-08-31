@@ -1,37 +1,54 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import re
 
+with open('d:/VoiceNova/04-frontend/src/app/api/payment/mock-checkout/route.ts', 'r', encoding='utf-8') as f:
+    content = f.read()
 
-const JWT_SECRET = process.env.JWT_SECRET || "voicenova_neural_auth_secret_key_2026_prod";
+# Replace the payment logic
+logic_find = '''    // Update user plan
+    await prisma.user.update({
+      where: { id: userId },
+      data: { plan: plan },
+    });
 
-export async function POST(req: NextRequest) {
-  try {
-    const token = req.cookies.get("vn_session")?.value;
-    if (!token) {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    // Deactivate old subscriptions
+    await prisma.subscription.updateMany({
+      where: { userId, status: "Active" },
+      data: { status: "Canceled" },
+    });
+
+    // Create new subscription
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+    await prisma.subscription.create({
+      data: {
+        userId,
+        plan,
+        status: "Active",
+        creditLimit: limit,
+        creditUsed: 0,
+        startDate: new Date(),
+        endDate: nextMonth,
+      },
+    });
+
+    // Create payment history entry
+    if (amount > 0) {
+      await prisma.payment.create({
+        data: {
+          userId,
+          amount,
+          currency: "USD",
+          status: "Pending",
+          provider: "Easypaisa",
+          transactionId: reqBody.tid || ("trx_" + Math.random().toString(36).substring(2, 10)),
+        },
+      });
     }
 
-    const decoded = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-    const userId = decoded.id;
+    return NextResponse.json({ success: true, url: "/payment-success" });'''
 
-    const reqBody = await req.json(); const plan = reqBody.plan;
-
-    // Map plan names to credit limits
-    const creditMap: Record<string, number> = {
-      "Starter Plan": 100000,
-      "Pro Plan": 500000,
-      "Enterprise": 2000000,
-    };
-    const limit = creditMap[plan] || 50000;
-
-    const amountMap: Record<string, number> = {
-      "Starter Plan": 9.0,
-      "Pro Plan": 29.0,
-      "Enterprise": 99.0,
-    };
-    const amount = amountMap[plan] || 0;
-
-    const provider = reqBody.paymentMethod || "Easypaisa";
+logic_repl = '''    const provider = reqBody.paymentMethod || "Easypaisa";
 
     if (provider === "easypaisa") {
       // 1. EASYPAISA (Local Pakistan Flow) -> MANUAL APPROVAL
@@ -88,10 +105,9 @@ export async function POST(req: NextRequest) {
         });
       }
       return NextResponse.json({ success: true, url: "/payment-success" });
-    }
-  } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
-  }
-}
+    }'''
+content = content.replace(logic_find, logic_repl)
 
-
+with open('d:/VoiceNova/04-frontend/src/app/api/payment/mock-checkout/route.ts', 'w', encoding='utf-8') as f:
+    f.write(content)
+print("Checkout logic updated")

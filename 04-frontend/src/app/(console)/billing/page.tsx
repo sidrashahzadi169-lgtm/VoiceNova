@@ -63,8 +63,8 @@ export default function Billing() {
   };
   
   const processCheckout = async () => {
-    if (paymentMethod === "stripe" || paymentMethod === "paypal") {
-      showToast(paymentMethod.toUpperCase() + " API keys are missing in Vercel. Only Easypaisa is available manually.", "error");
+    if (paymentMethod === "paypal") {
+      showToast("PayPal API keys are missing. Use Credit Card or Easypaisa.", "error");
       return;
     }
     
@@ -78,7 +78,7 @@ export default function Billing() {
       const res = await fetch("/api/payment/mock-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: selectedPlan }),
+        body: JSON.stringify({ plan: selectedPlan, paymentMethod, tid }),
       });
       const data = await res.json();
       if (data.success && data.url) {
@@ -355,7 +355,7 @@ export default function Billing() {
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", background: paymentMethod === "stripe" ? "rgba(108, 99, 255, 0.1)" : "transparent" }}>
                 <input type="radio" name="payment" checked={paymentMethod === "stripe"} onChange={() => setPaymentMethod("stripe")} />
-                <span style={{ fontWeight: 600 }}>Credit Card (Stripe)</span>
+                <span style={{ fontWeight: 600 }}>Credit Card (International)</span>
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", background: paymentMethod === "paypal" ? "rgba(0, 194, 255, 0.1)" : "transparent" }}>
                 <input type="radio" name="payment" checked={paymentMethod === "paypal"} onChange={() => setPaymentMethod("paypal")} />
@@ -392,6 +392,8 @@ export default function Billing() {
     </div>
   );
 }
+
+
 
 
 

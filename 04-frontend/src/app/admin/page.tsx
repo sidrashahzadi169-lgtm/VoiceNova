@@ -42,12 +42,19 @@ interface AdminVoice {
 }
 
 interface AdminPayment {
-  invoice: string;
-  client: string;
-  date: string;
-  amt: string;
-  gateway: string;
-  status: "Paid" | "Refund Pending" | "Refunded";
+  id?: string;
+  invoice?: string;
+  client?: string;
+  date?: string;
+  amt?: string;
+  gateway?: string;
+  status?: string;
+  user?: { name: string; email: string };
+  transactionId?: string;
+  createdAt?: string | Date;
+  amount?: number;
+  currency?: string;
+  provider?: string;
 }
 
 interface AdminTicket {
@@ -99,6 +106,14 @@ export default function AdminConsole() {
             if (usersRes.ok) {
               const data = await usersRes.json();
               if (data.success) setUsers(data.data.users);
+            }
+            // Fetch Payments
+            const payRes = await fetch("https://voice-nova-sooty.vercel.app/api/admin/payments", {
+              headers: { "Authorization": "Bearer " + sessionData.token }
+            });
+            if (payRes.ok) {
+              const payData = await payRes.json();
+              if (payData.success) setPayments(payData.data);
             }
           } else {
              // Not authenticated, redirect
@@ -253,13 +268,23 @@ export default function AdminConsole() {
     }
   };
 
-  // Refund Payments
-  const handleApproveRefund = (invoiceId: string) => {
-    if (confirm("Approve and trigger refund transaction for invoice?")) {
-      setPayments((prev) =>
-        prev.map((p) => (p.invoice === invoiceId ? { ...p, status: "Refunded" } : p))
-      );
-      showToast("Refund transaction successfully approved!");
+  // Approve Payments
+  const handleApprovePayment = async (id: string) => {
+    if (confirm("Verify TID and approve this payment? This will upgrade the user.")) {
+      try {
+        const res = await fetch("https://voice-nova-sooty.vercel.app/api/admin/payments/" + id + "/approve", {
+          method: "PUT",
+          headers: { "Authorization": "Bearer " + sessionToken }
+        });
+        if (res.ok) {
+          setPayments(prev => prev.map(p => p.id === id ? { ...p, status: "Paid" } : p));
+          showToast("Payment Approved!");
+        } else {
+          showToast("Failed to approve payment", "error");
+        }
+      } catch(e) {
+        showToast("Network error", "error");
+      }
     }
   };
 
@@ -657,6 +682,7 @@ export default function AdminConsole() {
     </div>
   );
 }
+
 
 
 

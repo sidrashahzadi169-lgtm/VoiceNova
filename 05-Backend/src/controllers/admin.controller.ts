@@ -486,3 +486,54 @@ export async function deleteAdminVoice(req: AuthenticatedRequest, res: Response,
     next(error);
   }
 }
+
+export async function getAdminPayments(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const payments = await prisma.payment.findMany({
+      include: { user: { select: { name: true, email: true } } },
+      orderBy: { createdAt: "desc" }
+    });
+    res.status(200).json({ success: true, data: payments });
+  } catch (error) { next(error); }
+}
+
+export async function approveAdminPayment(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = req.params;
+    const payment = await prisma.payment.findUnique({ where: { id } });
+    if (!payment || payment.status === "Paid") {
+      res.status(400).json({ success: false, message: "Invalid payment" });
+      return;
+    }
+    
+    // Mark as paid
+    await prisma.payment.update({ where: { id }, data: { status: "Paid" } });
+    
+    // Automatically upgrade the user (assume Pro Plan for demo if we don't know the exact plan here)
+    const user = await prisma.user.update({
+      where: { id: payment.userId },
+      data: { plan: "Pro Plan" }
+    });
+
+    // Create Subscription
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    await prisma.subscription.updateMany({
+      where: { userId: user.id, status: "Active" },
+      data: { status: "Canceled" }
+    });
+    await prisma.subscription.create({
+      data: {
+        userId: user.id,
+        plan: "Pro Plan",
+        status: "Active",
+        creditLimit: 500000,
+        creditUsed: 0,
+        startDate: new Date(),
+        endDate: nextMonth
+      }
+    });
+
+    res.status(200).json({ success: true, message: "Payment approved and user upgraded" });
+  } catch (error) { next(error); }
+}
