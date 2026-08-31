@@ -11,6 +11,7 @@ import {
   streamAudio,
   getHistory,
   getLogByDownloadId,
+  deleteLog,
 } from "../controllers/elevenlabs.controller";
 
 const router = Router();
@@ -122,4 +123,8 @@ router.get("/history", getHistory);
 router.get("/log/:downloadId", getLogByDownloadId);
 
 export default router;
+
+
+router.delete("/audio/:downloadId", deleteLog);
+
 

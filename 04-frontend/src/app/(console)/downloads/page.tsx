@@ -120,6 +120,28 @@ export default function DownloadsPage() {
     };
   };
 
+  const handleDelete = async (entry: HistoryEntry) => {
+    if (!confirm("Are you sure you want to delete this audio?")) return;
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/audio/" + entry.downloadId, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + sessionToken }
+      });
+      if (res.ok) {
+        showToast("Audio deleted successfully!");
+        setHistory(prev => prev.filter(h => h.downloadId !== entry.downloadId));
+        if (playingId === entry.downloadId) {
+          audioRef.current?.pause();
+          setPlayingId(null);
+        }
+      } else {
+        showToast("Failed to delete audio.", "error");
+      }
+    } catch (err) {
+      showToast("Network error while deleting.", "error");
+    }
+  };
+
   const handleDownload = (entry: HistoryEntry) => {
     if (!entry.fileExists) {
       showToast("Audio file no longer available for download.", "error");
@@ -385,3 +407,4 @@ export default function DownloadsPage() {
     </div>
   );
 }
+

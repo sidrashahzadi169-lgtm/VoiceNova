@@ -73,4 +73,13 @@ router.put("/profile", protect, updateProfile);
  */
 router.delete("/account", protect, deleteAccount);
 
+import { updatePassword, getApiKeys, createApiKey, deleteApiKey } from "../controllers/user.controller";
+
+router.put("/password", protect, updatePassword);
+router.get("/apikeys", protect, getApiKeys);
+router.post("/apikeys", protect, createApiKey);
+router.delete("/apikeys/:keyId", protect, deleteApiKey);
+
 export default router;
+
+

@@ -28,13 +28,33 @@ export default function Settings() {
   const [dateFormat, setDateFormat] = useState("dd-mm-yyyy");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedName = localStorage.getItem("userFullName");
-      if (storedName) {
-        setFullName(storedName);
-        setUsername(storedName.toLowerCase().replace(/\s+/g, "_"));
-      }
+    async function initSettings() {
+      try {
+        const sessionRes = await fetch("/api/auth/session");
+        if (sessionRes.ok) {
+          const sessionData = await sessionRes.json();
+          if (sessionData.authenticated && sessionData.token) {
+            setSessionToken(sessionData.token);
+            
+            // Get profile
+            const profileRes = await fetch("https://voice-nova-sooty.vercel.app/api/users/profile", {
+              headers: { "Authorization": "Bearer " + sessionData.token }
+            });
+            if (profileRes.ok) {
+              const pData = await profileRes.json();
+              if (pData.success && pData.data) {
+                setFullName(pData.data.name);
+                setUsername(pData.data.email);
+              }
+            }
+            
+            // Get API Keys
+            loadApiKeys(sessionData.token);
+          }
+        }
+      } catch (err) {}
     }
+    initSettings();
   }, []);
 
   // Appearance state
@@ -52,8 +72,27 @@ export default function Settings() {
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
 
   // API Key & Storage state
-  const [apiKey, setApiKey] = useState("vn_live_d84f9328a9b2d83c27e8a931d8e12c80");
+  const [apiKey, setApiKey] = useState("");
   const [isKeyMasked, setIsKeyMasked] = useState(true);
+  const [apiKeysList, setApiKeysList] = useState<any[]>([]);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  
+  const loadApiKeys = async (token: string) => {
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/users/apikeys", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data) {
+          setApiKeysList(data.data);
+          if (data.data.length > 0) {
+            setApiKey(data.data[0].maskedKey);
+          }
+        }
+      }
+    } catch (err) {}
+  };
 
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
@@ -62,34 +101,88 @@ export default function Settings() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleGeneralSave = (e: React.FormEvent) => {
+  const handleGeneralSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (typeof window !== "undefined") {
-      localStorage.setItem("userFullName", fullName);
+    if (!sessionToken) return;
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/users/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionToken
+        },
+        body: JSON.stringify({ name: fullName })
+      });
+      if (res.ok) {
+        showToast("General settings updated successfully!");
+        if (typeof window !== "undefined") {
+          localStorage.setItem("userFullName", fullName);
+        }
+      } else {
+        showToast("Failed to update profile", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
     }
-    showToast("General settings updated successfully!");
   };
 
-  const handleSecuritySave = (e: React.FormEvent) => {
+  const handleSecuritySave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       showToast("Passwords do not match!", "error");
       return;
     }
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    showToast("Password updated successfully!");
+    if (!sessionToken) return;
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/users/password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionToken
+        },
+        body: JSON.stringify({ oldPassword, newPassword })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        showToast("Password updated successfully!");
+      } else {
+        showToast(data.message || "Failed to update password", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
+    }
   };
 
   const handleClearCache = () => {
     showToast("Successfully cleared 124.5 MB of browser cached speech models!");
   };
 
-  const handleRegenKey = () => {
-    const randomKey = "vn_live_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    setApiKey(randomKey);
-    showToast("New live API key regenerated successfully!");
+  const handleRegenKey = async () => {
+    if (!sessionToken) return;
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/users/apikeys", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionToken
+        },
+        body: JSON.stringify({ name: "Live API Key" })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setApiKey(data.data.rawKey);
+        setIsKeyMasked(false);
+        showToast("New API key generated! Please copy it now.");
+        loadApiKeys(sessionToken);
+      } else {
+        showToast("Failed to generate key", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
+    }
   };
 
   return (

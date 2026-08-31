@@ -711,3 +711,56 @@ export async function getLogByDownloadId(
   }
 }
 
+
+export async function deleteLog(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { downloadId } = req.params;
+    
+    let userId: string | null = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "voicenova_neural_auth_secret_key_2026_prod") as any;
+        if (decoded && decoded.id) {
+          userId = decoded.id;
+        }
+      } catch (err) {}
+    }
+
+    if (!userId) {
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
+    const log = await prisma.synthesisLog.findUnique({
+      where: { downloadId },
+    });
+
+    if (!log) {
+      res.status(404).json({ success: false, message: "Log not found" });
+      return;
+    }
+
+    if (log.userId !== userId) {
+      res.status(403).json({ success: false, message: "Forbidden" });
+      return;
+    }
+
+    if (log.filename) {
+      const storageDir = getStorageDir();
+      const filePath = path.join(storageDir, log.filename);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    await prisma.synthesisLog.delete({
+      where: { downloadId },
+    });
+
+    res.status(200).json({ success: true, message: "Audio deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
