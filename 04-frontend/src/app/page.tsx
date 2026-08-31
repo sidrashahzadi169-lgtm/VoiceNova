@@ -34,16 +34,9 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Modals Visibility
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
-
+    
   // Forms inputs
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [signupName, setSignupName] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
-
+          
   // Pricing Toggle (Monthly vs Annual)
   const [isAnnual, setIsAnnual] = useState(true);
 
@@ -274,25 +267,7 @@ export default function LandingPage() {
     showToast("Audio studio file downloaded successfully!");
   };
 
-  // Auth form handlers redirects to console dashboard
-  const handleLoginSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (loginEmail && loginPassword) {
-      setIsLoginOpen(false);
-      localStorage.setItem("userEmail", loginEmail);
-      router.push("/dashboard");
-    }
-  };
 
-  const handleSignupSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (signupName && signupEmail && signupPassword) {
-      setIsSignupOpen(false);
-      localStorage.setItem("userFullName", signupName);
-      localStorage.setItem("userEmail", signupEmail);
-      router.push("/dashboard");
-    }
-  };
 
   const faqs = [
     {
@@ -374,10 +349,10 @@ export default function LandingPage() {
           </nav>
 
           <div className="nav-actions">
-            <button className="btn btn-text" onClick={() => setIsLoginOpen(true)}>
+            <button className="btn btn-text" onClick={() => router.push("/login")}>
               Login
             </button>
-            <button className="btn btn-primary" onClick={() => setIsSignupOpen(true)}>
+            <button className="btn btn-primary" onClick={() => router.push("/signup")}>
               Get Started
             </button>
 
@@ -409,10 +384,10 @@ export default function LandingPage() {
               audio, or choose from our library of 200+ studio-grade voices.
             </p>
             <div className="hero-buttons">
-              <button className="btn btn-primary btn-lg btn-glow-hover" onClick={() => setIsSignupOpen(true)}>
+              <button className="btn btn-primary btn-lg btn-glow-hover" onClick={() => router.push("/signup")}>
                 Start Free
               </button>
-              <button className="btn btn-secondary btn-lg" onClick={() => showToast("Simulating product demo video playback...")}>
+              <button className="btn btn-secondary btn-lg" onClick={() => window.open("https://www.youtube.com/results?search_query=voicenova+ai", "_blank")}>
                 <Play size={14} className="btn-icon" style={{ fill: "currentColor", marginRight: "6px" }} /> Watch Demo
               </button>
             </div>
@@ -741,7 +716,7 @@ export default function LandingPage() {
                   <Check size={14} className="feature-icon" /> MP3 exports
                 </li>
               </ul>
-              <button className="btn btn-outline btn-full" onClick={() => setIsSignupOpen(true)}>
+              <button className="btn btn-outline btn-full" onClick={() => router.push("/signup")}>
                 Get Started
               </button>
             </div>
@@ -766,7 +741,7 @@ export default function LandingPage() {
                   <Check size={14} className="feature-icon" /> 1 custom cloned voice
                 </li>
               </ul>
-              <button className="btn btn-outline btn-full" onClick={() => setIsSignupOpen(true)}>
+              <button className="btn btn-outline btn-full" onClick={() => router.push("/signup")}>
                 Choose Starter
               </button>
             </div>
@@ -797,7 +772,7 @@ export default function LandingPage() {
                   <Check size={14} className="feature-icon" /> Commercial API keys
                 </li>
               </ul>
-              <button className="btn btn-primary btn-full btn-glow-hover" onClick={() => setIsSignupOpen(true)}>
+              <button className="btn btn-primary btn-full btn-glow-hover" onClick={() => router.push("/signup")}>
                 Choose Pro
               </button>
             </div>
@@ -820,7 +795,7 @@ export default function LandingPage() {
                   <Check size={14} className="feature-icon" /> 24/7 dedicated support
                 </li>
               </ul>
-              <button className="btn btn-outline btn-full" onClick={() => showToast("Contacting sales channels...")}>
+              <button className="btn btn-outline btn-full" onClick={() => window.location.href = "mailto:admin@voicenova.ai"}>
                 Contact Sales
               </button>
             </div>
@@ -869,7 +844,7 @@ export default function LandingPage() {
             <p className="cta-desc">
               Sign up today and get 10,000 characters free. Experience our ultra-realistic neural models now.
             </p>
-            <button className="btn btn-primary btn-lg btn-glow-hover" onClick={() => setIsSignupOpen(true)}>
+            <button className="btn btn-primary btn-lg btn-glow-hover" onClick={() => router.push("/signup")}>
               Get Started for Free <ArrowRight size={14} style={{ marginLeft: "8px", display: "inline-block" }} />
             </button>
           </div>
@@ -916,154 +891,6 @@ export default function LandingPage() {
          MODALS POPUP OVERLAYS (Login / Sign Up)
          ========================================================================== */}
       
-      {/* Login Modal */}
-      {isLoginOpen && (
-        <div className="modal-overlay active" onClick={(e) => e.target === e.currentTarget && setIsLoginOpen(false)}>
-          <div className="auth-card glass-panel">
-            <button className="modal-close-btn" onClick={() => setIsLoginOpen(false)}>
-              <X size={16} />
-            </button>
-            <div className="auth-header">
-              <h2 className="auth-title">Welcome Back</h2>
-              <p className="auth-subtitle">Log in to your VoiceNova dashboard</p>
-            </div>
-
-            <form id="loginForm" onSubmit={handleLoginSubmit}>
-              <div className="form-group">
-                <label htmlFor="loginEmail">Email Address</label>
-                <div style={{ position: "relative" }}>
-                  <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
-                  <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="you@example.com"
-                    style={{ paddingLeft: "40px" }}
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginTop: "12px" }}>
-                <label htmlFor="loginPassword">Password</label>
-                <div style={{ position: "relative" }}>
-                  <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
-                  <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="••••••••"
-                    style={{ paddingLeft: "40px" }}
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="btn btn-primary btn-full btn-glow-hover" style={{ marginTop: "20px" }}>
-                Log In
-              </button>
-            </form>
-
-            <div className="auth-footer-text">
-              Don't have an account?{" "}
-              <button
-                className="btn-text-link"
-                onClick={() => {
-                  setIsLoginOpen(false);
-                  setIsSignupOpen(true);
-                }}
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Signup Modal */}
-      {isSignupOpen && (
-        <div className="modal-overlay active" onClick={(e) => e.target === e.currentTarget && setIsSignupOpen(false)}>
-          <div className="auth-card glass-panel">
-            <button className="modal-close-btn" onClick={() => setIsSignupOpen(false)}>
-              <X size={16} />
-            </button>
-            <div className="auth-header">
-              <h2 className="auth-title">Create Account</h2>
-              <p className="auth-subtitle">Start generating AI voices for free</p>
-            </div>
-
-            <form id="signupForm" onSubmit={handleSignupSubmit}>
-              <div className="form-group">
-                <label htmlFor="signupName">Full Name</label>
-                <div style={{ position: "relative" }}>
-                  <User size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
-                  <input
-                    type="text"
-                    id="signupName"
-                    placeholder="Alex Morgan"
-                    style={{ paddingLeft: "40px" }}
-                    value={signupName}
-                    onChange={(e) => setSignupName(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginTop: "12px" }}>
-                <label htmlFor="signupEmail">Email Address</label>
-                <div style={{ position: "relative" }}>
-                  <Mail size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
-                  <input
-                    type="email"
-                    id="signupEmail"
-                    placeholder="you@example.com"
-                    style={{ paddingLeft: "40px" }}
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginTop: "12px" }}>
-                <label htmlFor="signupPassword">Password</label>
-                <div style={{ position: "relative" }}>
-                  <Lock size={14} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
-                  <input
-                    type="password"
-                    id="signupPassword"
-                    placeholder="••••••••"
-                    style={{ paddingLeft: "40px" }}
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="btn btn-primary btn-full btn-glow-hover" style={{ marginTop: "20px" }}>
-                Create Account
-              </button>
-            </form>
-
-            <div className="auth-footer-text">
-              Already have an account?{" "}
-              <button
-                className="btn-text-link"
-                onClick={() => {
-                  setIsSignupOpen(false);
-                  setIsLoginOpen(true);
-                }}
-              >
-                Log In
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Toast Alert popup notification */}
       {toast && (
         <div
