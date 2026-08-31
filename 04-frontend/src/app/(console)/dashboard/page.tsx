@@ -101,34 +101,45 @@ export default function Dashboard() {
   // Recent synthesized tracks list
   const [recentTracks, setRecentTracks] = useState<RecentTrack[]>([]);
   const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [analytics, setAnalytics] = useState<any>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const loadRecentTracks = async (token: string) => {
     try {
       const res = await fetch("https://voice-nova-sooty.vercel.app/api/elevenlabs/history?limit=5", {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
+        headers: { "Authorization": "Bearer " + token },
       });
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.data) {
           const mapped = data.data.map((log: any) => ({
             id: log.downloadId,
-            title: `Studio Synthesis - ${log.voiceName}`,
+            title: "Studio Synthesis - " + log.voiceName,
             voice: log.voiceName,
             lang: log.modelId,
             date: new Date(log.createdAt).toLocaleDateString(),
-            duration: `${Math.floor(log.duration / 60)}:${String(Math.floor(log.duration % 60)).padStart(2, '0')}`,
+            duration: `${Math.floor(log.duration / 60)}:${String(Math.floor(log.duration % 60)).padStart(2, "0")}`,
             text: log.text,
-            audioUrl: `https://voice-nova-sooty.vercel.app${log.audioUrl}`,
+            audioUrl: "https://voice-nova-sooty.vercel.app" + log.audioUrl,
           }));
           setRecentTracks(mapped);
         }
       }
-    } catch (err) {
-      console.error("Failed to load history in dashboard", err);
-    }
+    } catch (err) {}
+  };
+
+  const loadAnalytics = async (token: string) => {
+    try {
+      const res = await fetch("https://voice-nova-sooty.vercel.app/api/analytics/usage", {
+        headers: { "Authorization": "Bearer " + token },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setAnalytics(data.data);
+        }
+      }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -140,11 +151,10 @@ export default function Dashboard() {
           if (sessionData.authenticated && sessionData.token) {
             setSessionToken(sessionData.token);
             loadRecentTracks(sessionData.token);
+            loadAnalytics(sessionData.token);
           }
         }
-      } catch (err) {
-        console.error("Failed to init dashboard session", err);
-      }
+      } catch (err) {}
     }
     initDashboard();
   }, []);
@@ -445,8 +455,7 @@ export default function Dashboard() {
               </defs>
             </svg>
             <div className="progress-ring-text">
-              <span className="ring-percentage">45%</span>
-              <span className="ring-label">Used</span>
+              <span className="ring-percentage">{analytics?.subscription ? Math.round((analytics.subscription.creditUsed / analytics.subscription.creditLimit) * 100) : 0}%</span><span className="ring-label">Used</span>
             </div>
           </div>
         </div>
@@ -460,7 +469,7 @@ export default function Dashboard() {
           </div>
           <div className="metric-text-side">
             <span className="metric-label">Characters Synthesized</span>
-            <h3 className="metric-number">45,210</h3>
+              <h3 className="metric-number">{analytics?.metrics?.totalCharsUsedInPeriod?.toLocaleString() || "0"}</h3>
             <span className="metric-subtext">Used this billing cycle</span>
           </div>
         </div>
@@ -471,8 +480,8 @@ export default function Dashboard() {
           </div>
           <div className="metric-text-side">
             <span className="metric-label">Voices Configured</span>
-            <h3 className="metric-number">12 Saved</h3>
-            <span className="metric-subtext">5 standard, 7 clones</span>
+              <h3 className="metric-number">{analytics?.charts?.voiceTrends?.length || 0} Active</h3>
+              <span className="metric-subtext">Recently used</span>
           </div>
         </div>
 
@@ -481,9 +490,9 @@ export default function Dashboard() {
             <Folder size={20} />
           </div>
           <div className="metric-text-side">
-            <span className="metric-label">Active Projects</span>
-            <h3 className="metric-number">8 Saved</h3>
-            <span className="metric-subtext">WAV exports generated</span>
+            <span className="metric-label">Audio Generations</span>
+              <h3 className="metric-number">{analytics?.metrics?.totalGenerations?.toLocaleString() || "0"} Saved</h3>
+              <span className="metric-subtext">WAV exports generated</span>
           </div>
         </div>
 
@@ -492,8 +501,8 @@ export default function Dashboard() {
             <Zap size={20} />
           </div>
           <div className="metric-text-side">
-            <span className="metric-label">Remaining Balance</span>
-            <h3 className="metric-number">54,790 Chars</h3>
+            <span className="metric-label">Remaining Quota</span>
+              <h3 className="metric-number">{analytics?.subscription?.remaining?.toLocaleString() || "100,000"} Chars</h3>
             <span className="metric-subtext">Quota resets in 12 days</span>
           </div>
         </div>
@@ -822,5 +831,9 @@ export default function Dashboard() {
     </div>
   );
 }
+
+
+
+
 
 
