@@ -63,14 +63,24 @@ export default function Billing() {
   };
   
   const processCheckout = async () => {
-    showToast("Initializing secure checkout via " + paymentMethod + "...");
+    if (paymentMethod === "international") {
+      showToast("Initializing secure checkout via " + paymentMethod + "...");
+    } else {
+      if (tid.length < 5) {
+        showToast("Please enter a valid Transaction ID (TID).", "error");
+        return;
+      }
+      showToast("Submitting your payment for verification...");
+    }
+
     try {
       const res = await fetch("https://voice-nova-sooty.vercel.app/api/payment/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": "Bearer " + (localStorage.getItem("vn_token") || "") },
-        body: JSON.stringify({ planName: selectedPlan, gateway: paymentMethod }),
+        body: JSON.stringify({ planName: selectedPlan, gateway: paymentMethod, tid }),
       });
       const data = await res.json();
+      
       if (data.success && data.data?.paymentUrl) {
         window.location.href = data.data.paymentUrl;
       } else if (res.status === 503 || data.error_code === "MISSING_GATEWAY_CONFIG") {

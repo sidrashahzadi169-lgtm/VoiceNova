@@ -348,6 +348,27 @@ export async function createCheckoutSession(req: AuthenticatedRequest, res: Resp
     const amount = amountMap[planName] || 9.0;
 
     try {
+      // For local manual payments (Easypaisa/Zindagi)
+      if (gateway === "easypaisa" || gateway === "zindagi") {
+        const tid = req.body.tid;
+        if (!tid || tid.length < 5) {
+          res.status(400).json({ success: false, message: "Valid Transaction ID (TID) is required" });
+          return;
+        }
+        await prisma.payment.create({
+          data: {
+            userId,
+            amount,
+            currency: "PKR",
+            status: "Pending",
+            provider: gateway === "zindagi" ? "Zindagi by JS Bank" : "Easypaisa Mobile",
+            transactionId: tid
+          }
+        });
+        res.status(200).json({ success: true, data: { paymentUrl: "/payment-success?status=pending" } });
+        return;
+      }
+
       const provider = PaymentFactory.getProvider(gateway);
       
       const successUrl = process.env.FRONTEND_URL 
