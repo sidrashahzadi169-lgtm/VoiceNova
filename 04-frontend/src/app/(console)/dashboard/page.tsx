@@ -52,6 +52,10 @@ export default function Dashboard() {
     "Welcome to VoiceNova Studio. Experience the absolute pinnacle of high-fidelity neural vocal synthesis. Adjust the pitch, language, and emotional models to synthesize human-like voiceovers in real-time."
   );
   const [aiPrompt, setAiPrompt] = useState("");
+  const [aiContentType, setAiContentType] = useState("General Voice-over");
+  const [aiTone, setAiTone] = useState("Professional");
+  const [aiLength, setAiLength] = useState("Medium");
+  const [aiLanguage, setAiLanguage] = useState("English");
   const [chosenVoice, setChosenVoice] = useState("Nova");
   const [chosenLanguage, setChosenLanguage] = useState("en");
   const [speedVal, setSpeedVal] = useState(1.0);
@@ -251,16 +255,38 @@ export default function Dashboard() {
     }
   };
 
-  const handleAIWriter = () => {
+  const handleAIWriter = async () => {
     const desc = aiPrompt.trim();
     if (!desc) {
       showToast("Please describe the script first!", "error");
       return;
     }
-    const randPreset = aiPromptsPresets[Math.floor(Math.random() * aiPromptsPresets.length)];
-    const textToSimulate = `VoiceNova AI Output: Based on your prompt '${desc}', here is a customized vocal layout. Access 200+ distinct actors and model emotional parameters in the configuration panel. Let's start synthesizing.`;
-    simulateAITyping(textToSimulate);
-    setAiPrompt("");
+    
+    setIsSynthesizing(true);
+    showToast("Generating script with AI...");
+    
+    try {
+      const fullPrompt = "Content Type: " + aiContentType + "\nTone: " + aiTone + "\nLength: " + aiLength + "\nLanguage: " + aiLanguage + "\n\nTopic/Description: " + desc;
+      
+      const res = await fetch("/api/ai/generate-script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: fullPrompt })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Clear editor and simulate typing the new script
+        setEditorText("");
+        simulateAITyping(data.text);
+      } else {
+        showToast(data.message || "AI failed to generate script", "error");
+      }
+    } catch (err) {
+      showToast("Network error contacting AI provider", "error");
+    } finally {
+      setIsSynthesizing(false);
+    }
   };
 
   const insertPause = () => {
@@ -796,3 +822,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+

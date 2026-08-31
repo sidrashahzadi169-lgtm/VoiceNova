@@ -24,21 +24,13 @@ export default function AIAssistant({ isOpen, onClose }: AIAssistantProps) {
   const [inputText, setInputText] = useState("");
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
-  const botAnswers = [
-    "To make Nova sound warmer, set speed rate to 0.95x and increase pitch by +5%. This creates a rich narrative cadence.",
-    "You can add brief breathing elements by writing '[pause: 0.4s]' inside the text scripts. Try it out!",
-    "Yes, you can export speech in French or Spanish! Simply set the Language dropdown selector before hitting synthesize.",
-    "To synthesize deep cinematic voices, pick Vortex (Male) and slide Pitch down to -15%.",
-    "Your characters quota resets on the 15th of every month. You currently have 54,790 characters remaining.",
-  ];
-
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = inputText.trim();
     if (!text) return;
@@ -46,23 +38,26 @@ export default function AIAssistant({ isOpen, onClose }: AIAssistantProps) {
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setInputText("");
 
-    // Add typing indicator
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: "Typing...", isTyping: true },
-      ]);
-    }, 400);
+    setMessages((prev) => [...prev, { sender: "bot", text: "Typing...", isTyping: true }]);
 
-    // Answer response
-    setTimeout(() => {
-      setMessages((prev) => {
-        // Remove typing indicator and add real answer
-        const filtered = prev.filter((m) => !m.isTyping);
-        const randomAnswer = botAnswers[Math.floor(Math.random() * botAnswers.length)];
-        return [...filtered, { sender: "bot", text: randomAnswer }];
+    try {
+      const res = await fetch("/api/ai/generate-script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: text, mode: "chat" })
       });
-    }, 1600);
+      const data = await res.json();
+      
+      setMessages((prev) => {
+        const filtered = prev.filter((m) => !m.isTyping);
+        return [...filtered, { sender: "bot", text: data.success ? data.text : (data.message || "I encountered an error.") }];
+      });
+    } catch (err) {
+      setMessages((prev) => {
+        const filtered = prev.filter((m) => !m.isTyping);
+        return [...filtered, { sender: "bot", text: "Network error. Please try again." }];
+      });
+    }
   };
 
   return (
@@ -90,24 +85,26 @@ export default function AIAssistant({ isOpen, onClose }: AIAssistantProps) {
               className={`chat-message ${msg.sender === "user" ? "user-msg" : "assistant-msg"}`}
             >
               {msg.isTyping ? (
-                <p>
-                  Typing
-                  <span className="dot-blink">.</span>
-                  <span className="dot-blink">.</span>
-                  <span className="dot-blink">.</span>
-                </p>
+                <p>Typing<span className="dot-blink">.</span><span className="dot-blink">.</span><span className="dot-blink">.</span></p>
               ) : (
                 <p>{msg.text}</p>
               )}
             </div>
           ))}
+          {messages.length === 1 && (
+            <div className="quick-actions" style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "16px" }}>
+              <button onClick={() => setInputText("Write a 30-second Facebook reel script")} style={{ fontSize: "0.75rem", padding: "6px 10px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "100px", color: "white", cursor: "pointer" }}>Write a Script</button>
+              <button onClick={() => setInputText("Help me improve my audio script")} style={{ fontSize: "0.75rem", padding: "6px 10px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "100px", color: "white", cursor: "pointer" }}>Improve My Script</button>
+              <button onClick={() => setInputText("How do I generate a voice?")} style={{ fontSize: "0.75rem", padding: "6px 10px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "100px", color: "white", cursor: "pointer" }}>Generate Voice</button>
+            </div>
+          )}
         </div>
 
         <form className="chat-footer" id="chatFormInput" onSubmit={handleSubmit}>
           <input
             type="text"
             id="chatInputMessage"
-            placeholder="Ask to regenerate API keys, disable notifications, or delete old audio..."
+            placeholder="Ask AI to help you create..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             required
@@ -120,3 +117,6 @@ export default function AIAssistant({ isOpen, onClose }: AIAssistantProps) {
     </div>
   );
 }
+
+
+
