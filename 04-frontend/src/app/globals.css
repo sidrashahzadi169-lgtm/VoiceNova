@@ -6693,3 +6693,118 @@ img, video, canvas, iframe, object, embed {
     padding: 20px !important;
   }
 }
+
+/* ==========================================================================
+   PERFECT MOBILE RESPONSIVE FIXES (HEADER, SIDEBAR & DASHBOARD CARDS)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Header fixes */
+  .dash-header {
+    padding: 0 12px !important;
+    height: 64px !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .header-left {
+    gap: 8px !important;
+    max-width: none !important;
+    flex: 1 !important;
+    overflow: hidden !important;
+  }
+
+  .sidebar-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    flex-shrink: 0 !important;
+    color: #fff !important;
+  }
+
+  .studio-breadcrumbs {
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .bread-root {
+    display: none !important;
+  }
+
+  .bread-sep {
+    display: none !important;
+  }
+
+  .header-right {
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .assistant-btn span {
+    display: none !important;
+  }
+
+  .assistant-btn {
+    padding: 8px 10px !important;
+    min-height: 38px !important;
+  }
+
+  .user-profile-details {
+    display: none !important;
+  }
+
+  .icon-notification-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+  }
+
+  /* Welcome Card Fixes */
+  .welcome-card {
+    padding: 20px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .welcome-title {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+    word-break: break-word !important;
+  }
+
+  .welcome-card p, .welcome-card span {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .welcome-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .welcome-buttons .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Dashboard Metrics Grid on Mobile */
+  .dash-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Dashboard Workspace Container Padding */
+  .dash-workspace {
+    padding: 12px !important;
+  }
+}
